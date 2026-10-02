@@ -24,7 +24,7 @@ make test               # offline tests
 |---|---|
 | `config.yml` | email, office, `url` + `tagline` (link previews), `cursor_robot` / `light_switch` (mouse-following robot and dark-mode switch, both off by default), name, bio (`[[keyword]]` gets a hand-drawn underline), "now" line, links, collaborators (`key` people up front, all other co-authors behind "+N more"), where papers come from |
 | `content/themes.yml` | research themes ("what I work on") and the "let's connect!" section (text, doodle caption), incl. optional student projects |
-| `content/news.yml` | news list |
+| `content/news.yml` | news list (empty = section hidden) |
 | `content/robot_today.yml` | "today the robot is …" lines. Every number must come from a paper; `source` says where |
 | `content/failures.yml` | failure of the month (newest first). Add one with `.venv/bin/sitegen add-failure clip.mov --title "…" --caption "…"` (no date is shown, so it never goes stale) |
 | `content/paper_links.yml` | per-paper extras: venue ("CVPR 2026", shown as a sticker), a missing project page, hiding a paper. Applied at build time, no sync needed |

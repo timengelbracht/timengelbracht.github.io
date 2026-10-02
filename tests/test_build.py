@@ -14,6 +14,7 @@ def test_build_renders_every_paper(repo):
     assert 'id="buddy"' not in html          # cursor robot is off unless cursor_robot: true
     assert 'id="lightSwitch"' not in html    # light switch is off unless light_switch: true
     assert "<b>now:</b>" not in html         # "now" line is left out while empty
+    assert 'id="news-h"' not in html         # news section is left out while content/news.yml is empty
 
 
 def test_unknown_authors_render_nothing():

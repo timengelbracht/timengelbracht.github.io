@@ -332,13 +332,13 @@ body>svg:first-of-type{position:absolute}
     <p class="crew-note">Cool people, fun to work with ;)</p>
   </section>{% endif %}
 
-  <section aria-labelledby="news-h">
+{% if news %}  <section aria-labelledby="news-h">
     <h2 id="news-h">news</h2>
     <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px">
       {% for n in news %}<li style="display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px"><time style="font-family:var(--f-mono);font-size:13px;color:var(--muted);padding-top:3px">{{ n.date }}</time><span>{{ n.text }}</span></li>
       {% endfor %}
     </ul>
-  </section>
+  </section>{% endif %}
 
   {% if open_call or email %}<section class="call" id="contact" aria-labelledby="call-h">
     <div class="call-text">
