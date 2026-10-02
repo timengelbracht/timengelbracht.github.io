@@ -22,7 +22,7 @@ make test               # offline tests
 
 | File | What it controls |
 |---|---|
-| `config.yml` | email, office, `url` + `tagline` (link previews), `cursor_robot: true/false` (the robot following the mouse, off by default), name, bio (`[[keyword]]` gets a hand-drawn underline), "now" line, links, collaborators, where papers come from |
+| `config.yml` | email, office, `url` + `tagline` (link previews), `cursor_robot` / `light_switch` (mouse-following robot and dark-mode switch, both off by default), name, bio (`[[keyword]]` gets a hand-drawn underline), "now" line, links, collaborators, where papers come from |
 | `content/themes.yml` | research themes ("what I work on") and the "work with me" open call, incl. optional student projects |
 | `content/news.yml` | news list |
 | `content/robot_today.yml` | "today the robot is …" lines. Every number must come from a paper; `source` says where |

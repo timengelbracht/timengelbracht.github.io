@@ -23,6 +23,9 @@ office: ""   # e.g. "CAB G 85.1, Universitätstrasse 6, 8092 Zürich" (left out 
 
 # The little robot that follows the mouse. Off to keep the page calm.
 cursor_robot: false
+# The light switch (top right) that toggles dark mode. Off to keep the page calm;
+# the page still follows the visitor's system light/dark setting.
+light_switch: false
 
 # Put your photo at assets/headshot.jpg (square works best). Until then a placeholder shows.
 headshot: assets/headshot.jpg

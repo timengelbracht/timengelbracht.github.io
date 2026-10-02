@@ -12,6 +12,7 @@ def test_build_renders_every_paper(repo):
     has_photo = (repo.root / "assets/headshot.jpg").exists()
     assert ("photo coming soon" in html) != has_photo  # placeholder only until the photo exists
     assert 'id="buddy"' not in html          # cursor robot is off unless cursor_robot: true
+    assert 'id="lightSwitch"' not in html    # light switch is off unless light_switch: true
 
 
 def test_unknown_authors_render_nothing():
