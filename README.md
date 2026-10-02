@@ -26,7 +26,7 @@ make test               # offline tests
 | `content/news.yml` | news list |
 | `content/robot_today.yml` | "today the robot is …" lines. Every number must come from a paper; `source` says where |
 | `content/failures.yml` | failure of the month (newest first). Add one with `.venv/bin/sitegen add-failure clip.mov --title "…" --caption "…"` (no date is shown, so it never goes stale) |
-| `content/paper_links.yml` | optional fixes for a single paper (missing project page, hide a paper, …) |
+| `content/paper_links.yml` | per-paper extras: venue ("CVPR 2026", shown as a sticker), a missing project page, hiding a paper. Applied at build time, no sync needed |
 | `assets/headshot.jpg` | your photo; a placeholder shows until it exists |
 | `assets/cv.pdf` | your CV (linked from the header) |
 | `overrides/<slug>/teaser.mp4` or `.png` | optional: replace an automatically found teaser |
@@ -41,6 +41,8 @@ After editing, `make build serve` shows the result. Pushing to `main` redeploys.
    (`semantic_scholar_ids`) and `extra_arxiv_ids`, merged by title.
 2. **Details**: authors and abstract from arXiv, then Semantic Scholar, OpenAlex and DBLP.
    Abbreviated names ("Z. Bauer") are replaced by full ones when a source has them.
+   The venue comes from the sources or from an arXiv comment like "Accepted to CVPR 2026";
+   `content/paper_links.yml` wins if you set one there.
 3. **Links**: project page, code, video and data found in the abstract, on the paper's first
    page on arXiv, in the code repository's homepage field, or at `project_page_guesses`.
    A project/data link is only used if the page loads and mentions the paper.

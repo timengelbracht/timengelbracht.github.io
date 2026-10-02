@@ -15,6 +15,7 @@ import re
 import time
 
 from sitegen import links as L
+from sitegen import venues
 from sitegen.paths import Paths
 from sitegen.sources import arxiv, dblp, openalex, scholar, semantic_scholar
 from sitegen.teasers import Teasers, doodle
@@ -65,6 +66,9 @@ def enrich_metadata(p: dict) -> None:
         time.sleep(3)
     if p.get("arxiv"):
         fill(p, arxiv.meta(p["arxiv"]), overwrite=("abstract", "authors", "comment"))
+        accepted = venues.from_text(p.get("comment", ""))  # e.g. "Accepted to CVPR 2026"
+        if accepted and (not p.get("venue") or "arxiv" in p["venue"].lower()):
+            p["venue"] = accepted
         p["arxiv_url"] = f"https://arxiv.org/abs/{p['arxiv']}"
         time.sleep(3)  # arXiv asks for one request every 3 s
     needs_names = any(is_abbreviated(a) for a in p.get("authors") or [])

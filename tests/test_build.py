@@ -26,3 +26,9 @@ def test_my_name_is_underlined():
 def test_cursor_robot_can_be_switched_on(repo):
     repo.config.write_text(repo.config.read_text().replace("cursor_robot: false", "cursor_robot: true"))
     assert 'id="buddy"' in build.run(repo).read_text()
+
+
+def test_venues_from_paper_links_show_without_sync(repo):
+    html = build.run(repo).read_text()
+    assert '<span class="venue">CVPR 2026</span>' in html
+    assert '<span class="venue">Humanoids 2025</span>' in html

@@ -9,8 +9,9 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from sitegen import venues
 from sitegen.paths import Paths
-from sitegen.util import load_yaml, log, norm
+from sitegen.util import load_yaml, log, norm, slugify
 
 TEMPLATES = Path(__file__).parent / "templates"
 
@@ -18,22 +19,6 @@ SCRIBBLES = [  # hand-drawn underline paths for [[keywords]] in the bio
     ("k1", "M1 6c18-4 30 3 48-1s34-3 50 1"),
     ("k2", "M1 5c14 3 30-4 46 0s36 3 52-2"),
     ("k3", "M1 4c20 4 36-3 52 1s30 2 46-1"),
-]
-
-VENUES = [  # (pattern, short name), checked in order
-    (r"arxiv", "arXiv"),
-    (r"computer vision and pattern recognition|\bcvpr\b", "CVPR"),
-    (r"international conference on computer vision|\biccv\b", "ICCV"),
-    (r"european conference on computer vision|\beccv\b", "ECCV"),
-    (r"robotics and automation letters|\bra-?l\b", "RA-L"),
-    (r"international conference on robotics and automation|\bicra\b", "ICRA"),
-    (r"intelligent robots and systems|\biros\b", "IROS"),
-    (r"robotics: science and systems|\brss\b", "RSS"),
-    (r"conference on robot learning|\bcorl\b", "CoRL"),
-    (r"neural information processing|\bneurips\b", "NeurIPS"),
-    (r"learning representations|\biclr\b", "ICLR"),
-    (r"3d vision|\b3dv\b", "3DV"),
-    (r"winter conference on applications of computer vision|\bwacv\b", "WACV"),
 ]
 
 CHIPS = (("project", "project page"), ("arxiv", "arXiv"), ("paper", "paper"),
@@ -65,12 +50,24 @@ def authors_html(p: dict, me: set) -> str:
     return ", ".join(f"<u>{html.escape(a)}</u>" if norm(a) in me else html.escape(a) for a in authors)
 
 
-def venue_short(p: dict) -> str:
-    raw = (p.get("venue") or "").strip()
-    v = next((short for pat, short in VENUES if re.search(pat, raw, re.I)), raw)
+def venue_label(p: dict) -> str:
+    v = venues.short(p.get("venue") or "", p.get("year"))
     if not v and p.get("arxiv"):
-        v = "arXiv"
-    return " ".join(x for x in (v, str(p.get("year") or "")) if x)
+        v = f"arXiv {p.get('year') or ''}".strip()
+    return v
+
+
+def apply_overrides(p: dict, manual: dict) -> dict:
+    """content/paper_links.yml also applies at build time, so edits there show up without a sync."""
+    extra = manual.get(p.get("slug") or slugify(p["title"])) or manual.get(p.get("arxiv") or "-") or {}
+    p = dict(p)
+    for f in ("venue", "authors", "abstract", "title"):
+        if extra.get(f):
+            p[f] = extra[f]
+    links = dict(p.get("links") or {})
+    links.update({k: v for k, v in extra.items() if k in ("project", "code", "video", "data", "paper")})
+    p["links"] = links
+    return p
 
 
 def split_title(t: str):
@@ -85,7 +82,8 @@ def prepare(p: dict, me: set) -> dict:
     p["link"] = links.get("project") or links.get("arxiv") or links.get("paper") or p.get("s2_url") \
         or p.get("scholar_url") or "#"
     p["authors_html"] = authors_html(p, me)
-    p["venue_short"] = venue_short(p)
+    p["venue"] = venue_label(p)
+    p["published"] = venues.is_published(p["venue"])
     p["chips"] = [(label, links[k]) for k, label in CHIPS if links.get(k)]
     p.setdefault("teaser", {"kind": "doodle", "scene": "reading", "from": "doodle"})
     return p
@@ -100,7 +98,8 @@ def run(paths: Paths) -> Path:
     if cfg.get("headshot") and not (paths.root / cfg["headshot"]).exists():
         cfg["headshot"] = None  # placeholder until the photo exists
 
-    papers = [prepare(p, me) for p in pubs.get("papers", [])]
+    manual = load_yaml(paths.content / "paper_links.yml", {})
+    papers = [prepare(apply_overrides(p, manual), me) for p in pubs.get("papers", [])]
     newest = None
     if papers:
         short, rest = split_title(papers[0]["title"])

@@ -103,6 +103,9 @@ h2{font-family:var(--f-hand);font-weight:500;font-size:15px;color:var(--muted);m
 .pt .arrow{display:inline-block;margin-left:6px;color:var(--muted);transition:transform .2s}
 .paper:hover .arrow{transform:translateX(3px);color:var(--accent)}
 .pa{margin:3px 0 0;color:var(--muted);font-size:14px}
+/* venue: a little sticker for published papers, plain text for preprints */
+.pa .venue{display:inline-block;margin:0 8px 0 0;padding:0 8px;font:700 13px/1.6 var(--f-hand);color:#17191e;background:var(--butter);border-radius:3px;transform:rotate(-2deg);box-shadow:0 2px 0 rgba(0,0,0,.08);white-space:nowrap}
+.pa .pre{white-space:nowrap}
 .pa u{text-decoration-color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 10px;padding:0}
 .chips .tag{margin:0;text-decoration:none;color:var(--muted);padding:1px 9px}
@@ -246,7 +249,7 @@ body>svg:first-of-type{position:absolute}
        data-kind="{{ p.teaser.kind }}" data-src="{{ p.teaser.src or '' }}" data-poster="{{ p.teaser.poster or '' }}"
        data-scene="{{ p.teaser.scene or '' }}" data-from="{{ p.teaser['from'] }}" data-abs="{{ p.abstract or '' }}">
       <p class="pt">{{ p.title }}<span class="arrow">→</span></p>
-      <p class="pa">{% if p.authors_html %}{{ p.authors_html|safe }} · {% endif %}{{ p.venue_short }}</p>
+      <p class="pa">{% if p.published %}<span class="venue">{{ p.venue }}</span>{% endif %}{{ p.authors_html|safe }}{% if not p.published and p.venue %}{% if p.authors_html %} · {% endif %}<span class="pre">{{ p.venue }} preprint</span>{% endif %}</p>
     </a>
     {% if p.chips %}<p class="chips">{% for lab, url in p.chips %}<a class="tag" href="{{ url }}" target="_blank" rel="noopener">{{ lab }}</a>{% endfor %}</p>{% endif %}
     {% endfor %}

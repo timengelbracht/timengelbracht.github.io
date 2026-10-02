@@ -1,8 +1,17 @@
 # Optional. Only for the rare paper where the automatic lookup misses something.
 # Key: the paper's slug (its short name in lowercase, e.g. "crocodl", "spot-on") or its arXiv id.
-# Fields: project, code, video, data, paper, authors, abstract, venue, hide: true
+# Fields: venue (shown as written, e.g. "CVPR 2026"), project, code, video, data, paper,
+#         authors, abstract, hide: true
+# Venues are also picked up automatically when the arXiv comment says e.g. "Accepted to CVPR 2026".
 # Links written here are used as they are (they are not re-checked).
 #
 # crocodl:
 #   project: https://localizoo.com/crocodl/
-{}
+spotlight:
+  venue: Humanoids 2025
+spot-on:
+  venue: CVPR Workshop 2025
+crocodl:
+  venue: CVPR 2025
+hoi:
+  venue: CVPR 2026
