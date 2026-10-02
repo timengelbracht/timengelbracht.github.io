@@ -1,0 +1,56 @@
+name: Sync papers and deploy
+
+on:
+  schedule:
+    - cron: "17 5 * * 1"   # every Monday 05:17 UTC
+  push:
+    branches: [main]        # editing config.yml or content/ redeploys
+  workflow_dispatch:        # "Run workflow" button for a manual sync
+
+permissions:
+  contents: write           # commit new papers and teasers
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+
+      - name: Sync papers
+        if: github.event_name != 'push'
+        run: sitegen sync
+      - name: Commit new papers and teasers
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "paper-sync-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data assets/teasers
+          git diff --cached --quiet || git commit -m "Weekly paper sync"
+          git push
+
+      - run: sitegen build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

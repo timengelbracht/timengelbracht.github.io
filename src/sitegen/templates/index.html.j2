@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ cfg.name }}</title>
+<meta name="description" content="{{ cfg.name }}: {{ cfg.now }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Shantell+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: one quiet 600px column; robots live at the edges and around the cursor, and only move when you interact. */
+:root{
+  --bg:#ffffff; --fg:#17191e; --muted:#6b7080; --rule:#eceef3; --hover:#f5f6f9; --accent:#3049c9;
+  --bot-line:#17191e; --sky:#bfe3ff; --rose:#ffd1dc; --mint:#c9f2c7; --butter:#ffe9a8; --bulb:#ffd84d;
+  --sky-ink:#5aa9ec; --rose-ink:#f2789a; --mint-ink:#5cc157;
+  --card:#ffffff; --shade:rgba(0,0,0,0);
+  --f-body:"Atkinson Hyperlegible",system-ui,sans-serif;
+  --f-hand:"Shantell Sans","Comic Neue",cursive;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121418; --fg:#e9eaee; --muted:#9a9fab; --rule:#262a31; --hover:#1b1e24; --accent:#9fb0ff; --card:#1b1e24; --shade:rgba(0,0,0,.32); --bot-line:#eef0f4; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121418; --fg:#e9eaee; --muted:#9a9fab; --rule:#262a31; --hover:#1b1e24; --accent:#9fb0ff; --card:#1b1e24; --shade:rgba(0,0,0,.32); --bot-line:#eef0f4; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{--mx:50vw;--my:30vh}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.6;padding-inline:20px;padding-block:72px 200px;overflow-x:hidden;transition:background .4s,color .4s}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(420px circle at var(--mx) var(--my),transparent 0,transparent 55%,var(--shade) 100%)}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+.col{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:44px;position:relative}
+h1{font-family:var(--f-hand);font-weight:700;font-size:clamp(34px,6vw,44px);line-height:1.1;margin:0;text-wrap:balance}
+.lead{margin:12px 0 0}
+.now{margin:14px 0 0;font-size:15px;color:var(--muted)}
+.now b{font-family:var(--f-hand);font-weight:500;color:var(--fg)}
+.links{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:14px;font-size:15px}
+h2{font-family:var(--f-hand);font-weight:500;font-size:15px;color:var(--muted);margin:0 0 8px}
+
+
+/* scribbled keywords */
+.kw{position:relative;white-space:nowrap;cursor:default}
+.kw svg{position:absolute;left:-2%;bottom:-7px;width:104%;height:10px;overflow:visible;pointer-events:none}
+.kw path{fill:none;stroke-width:2.4;stroke-linecap:round;opacity:.45;stroke-dasharray:240;transition:opacity .2s}
+.kw:hover path{opacity:1;animation:draw .5s ease-out}
+@keyframes draw{from{stroke-dashoffset:240}to{stroke-dashoffset:0}}
+.k1 path{stroke:var(--sky-ink)}.k2 path{stroke:var(--rose-ink)}.k3 path{stroke:var(--mint-ink)}
+
+/* sticky note: always points at the newest paper */
+.sticky{position:absolute;left:calc(100% + 36px);top:6px;width:170px;padding:16px 14px 14px;background:var(--butter);color:#17191e;font-family:var(--f-hand);font-size:15px;line-height:1.3;text-decoration:none;transform:rotate(3deg);box-shadow:0 8px 18px -10px rgba(0,0,0,.35);transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+.sticky::before{content:"";position:absolute;top:-9px;left:50%;width:58px;height:18px;margin-left:-29px;background:rgba(190,205,225,.65);transform:rotate(-4deg)}
+.sticky small{display:block;font-size:12px;opacity:.7;margin-bottom:4px}
+.sticky b{font-weight:700}
+.sticky:hover{transform:rotate(0) scale(1.04);color:#17191e}
+@media (max-width:1000px){header{display:flex;flex-direction:column}.sticky{order:9;align-self:flex-start;position:relative;left:auto;top:auto;display:block;margin:22px 0 0 6px;transform:rotate(-1.5deg)}}
+
+/* what the robot is doing today */
+.today{display:flex;align-items:center;gap:10px;margin-top:18px;font-size:15px;color:var(--muted);min-height:30px}
+.today svg{width:26px;flex:none;fill:var(--rose)}
+.today .what{font-family:var(--f-hand);color:var(--fg)}
+.today .what.swap,.today .src.swap{animation:swap .5s ease}
+.today .src{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);white-space:nowrap;text-decoration:none;border-bottom:1px dotted var(--muted);margin-left:6px}
+@keyframes swap{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:none}}
+
+/* collaborators */
+.crew{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;padding:0;list-style:none}
+.crew a{position:relative;text-decoration:none;border-bottom:1px dashed var(--muted)}
+.crew a svg{position:absolute;left:50%;bottom:calc(100% + 4px);width:34px;margin-left:-17px;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .3s cubic-bezier(.3,1.5,.5,1);pointer-events:none}
+.crew a:hover svg,.crew a:focus-visible svg{opacity:1;transform:none}
+.crew-note{margin:10px 0 0;font-size:14px;color:var(--muted)}
+
+
+/* headshot polaroid (left margin on wide screens) */
+.polaroid{position:absolute;right:calc(100% + 48px);top:4px;width:156px;padding:10px 10px 30px;background:#fff;box-shadow:0 10px 22px -12px rgba(0,0,0,.4);transform:rotate(-3deg);border:1px solid #e7e8ec}
+.polaroid::before{content:"";position:absolute;top:-10px;left:50%;width:56px;height:18px;margin-left:-28px;background:rgba(190,205,225,.65);transform:rotate(3deg);z-index:2}
+.polaroid img,.polaroid .ph{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:#eef0f4}
+.polaroid .ph{display:grid;place-items:center}
+.polaroid .ph svg{width:62%;stroke:#9aa0ad;stroke-width:2.4;fill:none;stroke-linecap:round}
+.polaroid figcaption{position:absolute;left:0;right:0;bottom:6px;text-align:center;font:500 13px var(--f-hand);color:#6b7080}
+.polaroid .peek{position:absolute;top:-34px;right:-10px;width:64px;fill:var(--sky);z-index:3;transform:rotate(6deg)}
+@media (max-width:1000px){.polaroid{position:relative;right:auto;top:auto;order:-1;width:132px;margin:8px 0 26px 4px}}
+
+/* failure of the month: a big sticky note */
+.fail{position:relative;align-self:flex-start;width:min(100%,520px);margin:18px 0 0 4px;padding:22px 20px 18px;background:var(--butter);color:#17191e;transform:rotate(-1.4deg);box-shadow:0 12px 26px -14px rgba(0,0,0,.45);transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+.fail:hover{transform:rotate(0)}
+.fail::before{content:"";position:absolute;top:-11px;left:50%;width:84px;height:22px;margin-left:-42px;background:rgba(190,205,225,.7);transform:rotate(2deg)}
+.fail h2{font-family:var(--f-hand);font-weight:700;font-size:20px;color:#17191e;margin:0 0 12px;line-height:1.2}
+.fail h2 small{display:block;font-weight:500;font-size:13px;color:#5b5a4e;margin-bottom:2px}
+.fail figure{margin:0;display:flex;flex-direction:column;gap:10px}
+.fail .vid{position:relative;border:2px solid #17191e;border-radius:6px;overflow:hidden;background:#000}
+.fail video{display:block;width:100%;height:auto;max-width:100%}
+.fail .sound{position:absolute;right:8px;top:8px;font:500 13px var(--f-hand);background:#fff;color:#17191e;border:2px solid #17191e;border-radius:99px;padding:2px 11px;cursor:pointer}
+.fail figcaption{font-family:var(--f-hand);font-size:15px;line-height:1.4;color:#17191e}
+.fail figcaption b{font-weight:700}
+.fail .older{font-family:var(--f-hand);font-size:13px;color:#5b5a4e;margin:10px 0 0}
+.fail .older a{color:#17191e}
+/* papers: plain rows, hover shows a clip */
+.paper{display:block;text-decoration:none;padding:12px 14px;margin:0 -14px;border-radius:10px;transition:background .2s}
+.paper:hover,.paper:focus-visible{background:var(--hover);color:inherit}
+.pt{font-weight:700;margin:0;line-height:1.35}
+.pt .arrow{display:inline-block;margin-left:6px;color:var(--muted);transition:transform .2s}
+.paper:hover .arrow{transform:translateX(3px);color:var(--accent)}
+.pa{margin:3px 0 0;color:var(--muted);font-size:14px}
+.pa u{text-decoration-color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 10px;padding:0}
+.chips .tag{margin:0;text-decoration:none;color:var(--muted);padding:1px 9px}
+.chips .tag:hover{color:var(--accent);border-color:var(--accent)}
+.tag{font-family:var(--f-mono);font-size:11.5px;border:1.2px solid var(--muted);border-radius:99px;padding:0 7px;margin-left:6px;white-space:nowrap}
+
+.teaser{position:fixed;left:0;top:0;width:min(540px,calc(100vw - 24px));z-index:9;pointer-events:none;opacity:0;transform:translate(-999px,-999px) rotate(-1deg);transition:opacity .18s}
+.teaser.on{opacity:1}
+.teaser .frame{position:relative;background:var(--card);padding:14px;display:grid;grid-template-columns:190px minmax(0,1fr);gap:16px;align-items:start}
+.teaser .media{min-width:0}
+.teaser .abs{min-width:0;font-size:12.5px;line-height:1.45;margin:0;color:var(--fg)}
+.teaser .abs span{display:-webkit-box;-webkit-line-clamp:12;-webkit-box-orient:vertical;overflow:hidden}
+.teaser .abs b{display:block;font-family:var(--f-hand);font-weight:500;font-size:13px;color:var(--muted);margin-bottom:4px}
+.teaser .frame>svg.border{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.teaser .frame>svg.border path{fill:none;stroke:var(--bot-line);stroke-width:2.4;stroke-linecap:round}
+.teaser .scene{display:block;width:100%;aspect-ratio:240/160;height:auto;max-width:100%}
+.teaser .cap{font-family:var(--f-hand);font-size:12.5px;color:var(--muted);margin:6px 2px 0}
+.scene-alt[hidden]{display:none}
+
+/* SpotLight mini scene */
+.sc-line{stroke:var(--bot-line);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.sc-fill{stroke:var(--bot-line);stroke-width:2.4;stroke-linejoin:round}
+.bulb{fill:var(--card);animation:bulb 3.2s infinite}
+.rays{opacity:0;animation:rays 3.2s infinite}
+.arm{animation:poke 3.2s infinite ease-in-out}
+.toggle{animation:tog 3.2s infinite}
+.drawerpull{animation:pull 3.2s infinite ease-in-out}
+.force{animation:rays 3.2s infinite}
+@keyframes pull{0%,20%{transform:translateX(0)}55%,85%{transform:translateX(30px)}100%{transform:translateX(0)}}
+@keyframes poke{0%,15%{transform:translateX(70px)}35%,45%{transform:translateX(0)}65%,100%{transform:translateX(70px)}}
+@keyframes tog{0%,38%{transform:translateY(0)}40%,96%{transform:translateY(9px)}100%{transform:translateY(0)}}
+@keyframes bulb{0%,39%{fill:var(--card)}41%,96%{fill:var(--bulb)}100%{fill:var(--card)}}
+@keyframes rays{0%,39%{opacity:0}41%,96%{opacity:1}100%{opacity:0}}
+
+/* footer */
+footer{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding-top:20px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--muted)}
+footer .psst{font-family:var(--f-hand);font-size:13px}
+footer .zz{font-family:var(--f-hand);font-size:14px;color:var(--accent)}
+
+/* robots */
+svg.bot{display:block;overflow:visible;stroke:var(--bot-line);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.rest{position:fixed;left:4vw;bottom:-14px;width:110px;z-index:6;fill:var(--sky);pointer-events:none}
+.side{position:fixed;right:-34px;top:38vh;z-index:6;width:100px;fill:var(--butter);transform:rotate(-90deg);transition:right .45s cubic-bezier(.3,1.5,.5,1)}
+.side.shy{right:-80px}
+
+/* cursor buddy */
+.buddy{position:fixed;left:0;top:0;width:42px;z-index:10;pointer-events:none;fill:var(--mint);will-change:transform}
+.buddy .closed,.buddy.sleep .open{display:none}
+.buddy.sleep .closed{display:inline}
+.buddy .zz{font:500 13px var(--f-hand);fill:var(--muted);stroke:none;opacity:0}
+.buddy.sleep .zz{opacity:1;animation:zz 2s infinite}
+.buddy.moving .wheels{animation:bob .25s infinite alternate}
+@keyframes bob{to{transform:translateY(-1.5px)}}
+@keyframes zz{0%{transform:translate(0,0);opacity:0}30%{opacity:1}100%{transform:translate(6px,-8px);opacity:0}}
+
+/* spot easter egg */
+.spot{position:fixed;bottom:6px;left:0;width:150px;z-index:7;fill:var(--butter);pointer-events:none;transform:translateX(-170px)}
+.spot.go{animation:trot 7s linear forwards}
+.spot.go .leg{animation:step .32s infinite alternate ease-in-out}
+.spot.go .leg.b{animation-delay:-.32s}
+@keyframes trot{to{transform:translateX(calc(100vw + 20px))}}
+@keyframes step{from{transform:rotate(14deg)}to{transform:rotate(-14deg)}}
+
+/* light switch */
+.switch-wrap{position:fixed;top:calc(18px + env(safe-area-inset-top,0px));right:22px;z-index:8;display:flex;align-items:center;gap:8px}
+.switch-wrap small{font-family:var(--f-hand);font-size:12.5px;color:var(--muted)}
+.switch{all:unset;cursor:pointer;width:34px;height:50px;border:2px solid var(--fg);border-radius:7px;background:var(--bg);position:relative;display:block}
+.switch::before,.switch::after{content:"";position:absolute;left:50%;width:3px;height:3px;border-radius:50%;background:var(--fg);transform:translateX(-50%)}
+.switch::before{top:4px}.switch::after{bottom:4px}
+.switch i{position:absolute;left:8px;right:8px;top:11px;height:24px;border:2px solid var(--fg);border-radius:4px;background:var(--butter)}
+.switch i::after{content:"";position:absolute;left:2px;right:2px;height:7px;top:2px;border-radius:2px;background:var(--fg);opacity:.85;transition:top .2s}
+.switch[aria-pressed="true"] i{background:var(--bg)}
+.switch[aria-pressed="true"] i::after{top:11px}
+.poker{position:fixed;top:calc(30px + env(safe-area-inset-top,0px));right:-210px;width:200px;z-index:7;fill:var(--butter);transition:right .35s ease-in-out;pointer-events:none}
+.poker.in{right:44px}
+
+.notes{border:1.5px dashed var(--muted);border-radius:12px;padding:18px 20px;font-size:15px}
+.notes h2{margin-bottom:10px;color:var(--fg)}
+.notes ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+
+@media (max-width:640px){body{padding-block:84px 170px}svg.side{display:none}svg.rest{width:64px;bottom:-26px}}
+@media (pointer:coarse){.buddy,.teaser{display:none}}
+@media (prefers-reduced-motion:reduce){
+  .side,.poker,body{transition:none}
+  .kw:hover path,.arm,.toggle,.bulb,.rays,.drawerpull,.force,.buddy *{animation:none!important}
+  .bulb{fill:var(--bulb)}.rays{opacity:1}.arm{transform:translateX(0)}
+}
+.teaser img.media-el,.teaser video.media-el{display:block;width:100%;height:auto;max-height:200px;object-fit:contain;background:var(--card);border-radius:4px}
+.teaser .media-el[hidden]{display:none}
+.today[hidden]{display:none}
+body>svg:first-of-type{position:absolute}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="bot-wave" viewBox="0 0 90 116">
+    <path d="M40 14V8" fill="none"/><circle cx="40" cy="5.5" r="3"/>
+    <rect x="20" y="14" width="40" height="30" rx="9"/>
+    <circle cx="32" cy="28" r="3.5" fill="#17191e" stroke="none"/><circle cx="48" cy="28" r="3.5" fill="#17191e" stroke="none"/>
+    <path d="M35 36q5 4 10 0" fill="none"/>
+    <rect x="24" y="48" width="32" height="36" rx="7"/>
+    <path d="M24 58q-10 8-8 20M56 58q12-6 16-22" fill="none"/><circle cx="73" cy="32" r="5"/>
+    <path d="M34 84v18M46 84v18M28 104h10M44 104h10" fill="none"/>
+  </symbol>
+</svg>
+
+<div class="switch-wrap">
+  <small id="switchLabel">lights</small>
+  <button class="switch" id="lightSwitch" aria-pressed="false" aria-label="Turn the lights off"><i></i></button>
+</div>
+<svg class="bot poker" id="poker" viewBox="0 0 200 60" aria-hidden="true">
+  <path d="M200 34H70" fill="none" stroke-width="14"/>
+  <path d="M200 34H70" fill="none" style="stroke:var(--butter)" stroke-width="8"/>
+  <circle cx="120" cy="34" r="8"/>
+  <path d="M66 30l-14-8l-8 3M66 38l-14 8l-8-3" fill="none"/>
+</svg>
+
+<main class="col">
+  <header style="position:relative">
+    {% if newest %}<a class="sticky" href="{{ newest.link }}" target="_blank" rel="noopener"><small>new paper!</small><b>{{ newest.short }}</b>{% if newest.rest %}: {{ newest.rest }}{% endif %} →</a>{% endif %}
+    <figure class="polaroid">
+      <svg class="bot peek" viewBox="0 0 120 64" aria-hidden="true"><path d="M60 14V6" fill="none"/><circle cx="60" cy="4.5" r="3.5"/><rect x="32" y="14" width="56" height="44" rx="12"/><circle cx="49" cy="33" r="4.5" style="fill:#17191e" stroke="none"/><circle cx="71" cy="33" r="4.5" style="fill:#17191e" stroke="none"/><path d="M53 44q7 5 14 0" fill="none"/><rect x="17" y="51" width="18" height="13" rx="5"/><rect x="85" y="51" width="18" height="13" rx="5"/></svg>
+      {% if cfg.headshot %}<img src="{{ cfg.headshot }}" alt="Photo of {{ cfg.name }}">{% else %}<div class="ph" role="img" aria-label="Photo placeholder"><svg viewBox="0 0 60 60"><circle cx="30" cy="22" r="10"/><path d="M12 54c2-12 10-18 18-18s16 6 18 18"/></svg></div>{% endif %}
+      <figcaption>{% if cfg.headshot %}that's me{% else %}photo coming soon{% endif %}</figcaption>
+    </figure>
+    <h1>{{ cfg.greeting }}</h1>
+    <p class="lead">{{ bio_html|safe }}</p>
+    <p class="now"><b>now:</b> {{ cfg.now }}</p>
+    <div class="links">{% for l in cfg.links %}<a href="{{ l.url }}" target="_blank" rel="noopener">{{ l.label }}</a>{% endfor %}</div>
+    {% if today %}<div class="today" aria-live="polite">
+      <svg class="bot" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 10V5" fill="none" stroke-width="2"/><circle cx="24" cy="4" r="2.4" stroke-width="2"/><rect x="10" y="10" width="28" height="20" rx="6" stroke-width="2.2"/><circle cx="19" cy="20" r="2.4" stroke="none" style="fill:#17191e"/><circle cx="29" cy="20" r="2.4" stroke="none" style="fill:#17191e"/><rect x="12" y="32" width="24" height="8" rx="4" stroke-width="2.2"/></svg>
+      <span>today the robot is <span class="what" id="what">{{ today[0].text }}</span><a class="src" id="src" href="https://arxiv.org/abs/{{ today[0].paper }}" target="_blank" rel="noopener">{{ today[0].source }}</a></span>
+    </div>{% endif %}
+  </header>
+
+  <section aria-labelledby="papers-h">
+    <h2 id="papers-h">papers</h2>
+    {% for p in papers %}
+    <a class="paper" href="{{ p.link }}" target="_blank" rel="noopener"
+       data-kind="{{ p.teaser.kind }}" data-src="{{ p.teaser.src or '' }}" data-poster="{{ p.teaser.poster or '' }}"
+       data-scene="{{ p.teaser.scene or '' }}" data-from="{{ p.teaser['from'] }}" data-abs="{{ p.abstract or '' }}">
+      <p class="pt">{{ p.title }}<span class="arrow">→</span></p>
+      <p class="pa">{% if p.authors_html %}{{ p.authors_html|safe }} · {% endif %}{{ p.venue_short }}</p>
+    </a>
+    {% if p.chips %}<p class="chips">{% for lab, url in p.chips %}<a class="tag" href="{{ url }}" target="_blank" rel="noopener">{{ lab }}</a>{% endfor %}</p>{% endif %}
+    {% endfor %}
+  </section>
+
+  {% if crew %}<section aria-labelledby="crew-h">
+    <h2 id="crew-h">people I've built robots with</h2>
+    <ul class="crew" id="crew">
+      {% for c in crew %}<li><a href="{{ c.url or '#crew-h' }}" {% if c.url %}target="_blank" rel="noopener"{% endif %} data-n="{{ c.name }}">{{ c.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>{% endif %}
+
+  <section aria-labelledby="news-h">
+    <h2 id="news-h">news</h2>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px">
+      {% for n in news %}<li style="display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px"><time style="font-family:var(--f-mono);font-size:13px;color:var(--muted);padding-top:3px">{{ n.date }}</time><span>{{ n.text }}</span></li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  {% if failures %}{% set f = failures[0] %}<section class="fail" aria-labelledby="fail-h">
+    <h2 id="fail-h"><small>failure of the month</small>{{ f.month }}</h2>
+    <figure>
+      <div class="vid">
+        <video id="failVid" src="{{ f.video }}" poster="{{ f.poster }}" muted loop playsinline preload="metadata" controls></video>
+        <button class="sound" id="failSound" type="button">sound on</button>
+      </div>
+      <figcaption>{% if f.title %}<b>{{ f.title }}</b> {% endif %}{{ f.caption }}</figcaption>
+    </figure>
+    {% if failures|length > 1 %}<p class="older">earlier failures: {% for o in failures[1:] %}<a href="{{ o.video }}" target="_blank" rel="noopener">{{ o.month }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %}
+  </section>{% endif %}
+
+  <footer id="footer">
+    <span>Papers update themselves every week. Last sync: {{ synced }}.</span>
+    <span class="psst">psst: type “spot”</span>
+  </footer>
+</main>
+
+<!-- hover teaser -->
+<div class="teaser" id="teaser" aria-hidden="true">
+  <div class="frame">
+    <svg class="border" viewBox="0 0 100 100" preserveAspectRatio="none"><path vector-effect="non-scaling-stroke" d="M1 2C30 0 70 3 99 1C100 30 98 70 99 99C70 100 30 97 1 99C0 70 2 30 1 2Z"/></svg>
+    <div class="media">
+    <svg class="scene scene-alt" id="sceneSwitch" viewBox="0 0 240 160" hidden>
+      <path class="sc-line" d="M80 0V34"/>
+      <g class="rays sc-line" style="stroke:var(--bulb)"><path d="M56 52l-10-4M104 52l10-4M80 80v10M60 72l-8 6M100 72l8 6"/></g>
+      <circle class="bulb sc-fill" cx="80" cy="54" r="16"/>
+      <rect class="sc-fill" x="72" y="34" width="16" height="7" rx="2" style="fill:var(--card)"/>
+      <rect class="sc-fill" x="150" y="60" width="30" height="44" rx="5" style="fill:var(--card)"/>
+      <rect class="toggle sc-fill" x="159" y="68" width="12" height="18" rx="3" style="fill:var(--butter)"/>
+      <g class="arm">
+        <path d="M250 120L214 120L190 86" fill="none" stroke="var(--bot-line)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M250 120L214 120L190 86" fill="none" stroke="var(--rose)" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle class="sc-fill" cx="214" cy="120" r="7" style="fill:var(--rose)"/>
+        <path class="sc-line" d="M188 82l-8-8M186 90l-9 2"/>
+      </g>
+      <path class="sc-line" d="M10 150H230" style="stroke-width:1.6"/>
+    </svg>
+    <svg class="scene scene-alt" id="sceneDrawer" viewBox="0 0 240 160" hidden>
+      <rect class="sc-fill" x="20" y="36" width="120" height="104" rx="4" style="fill:var(--card)"/>
+      <path class="sc-line" d="M20 88H140" style="stroke-width:1.6"/>
+      <rect class="sc-fill" x="32" y="100" width="96" height="30" rx="3" style="fill:var(--card)"/>
+      <g class="drawerpull">
+        <rect class="sc-fill" x="32" y="48" width="96" height="32" rx="3" style="fill:var(--sky)"/>
+        <path class="sc-line" d="M128 58v12M128 64h14"/>
+        <path d="M200 64H152" fill="none" stroke="var(--bot-line)" stroke-width="13" stroke-linecap="round"/>
+        <path d="M200 64H152" fill="none" stroke="var(--rose)" stroke-width="7.5" stroke-linecap="round"/>
+        <path class="sc-line" d="M152 58l-8-4M152 70l-8 4"/>
+      </g>
+      <g class="force sc-line"><path d="M160 34h40m-7-5l7 5l-7 5"/><text x="176" y="26" font-size="12" style="fill:var(--bot-line);stroke:none;font-family:var(--f-hand)">F</text></g>
+      <path class="sc-line" d="M10 150H230" style="stroke-width:1.6"/>
+    </svg>
+    <svg class="scene scene-alt" id="sceneRead" viewBox="0 0 240 160" hidden>
+      <g transform="translate(64 20) scale(1.1)" style="stroke:var(--bot-line);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;fill:var(--mint)">
+        <rect x="22" y="12" width="40" height="30" rx="9"/>
+        <circle cx="35" cy="27" r="3.4" style="fill:#17191e;stroke:none"/><circle cx="49" cy="27" r="3.4" style="fill:#17191e;stroke:none"/>
+        <rect x="18" y="46" width="48" height="40" rx="8"/>
+        <path d="M30 86v14M54 86v14M66 58l12-6" fill="none"/>
+        <rect x="72" y="26" width="30" height="38" rx="2" transform="rotate(8 87 45)" style="fill:#fff"/>
+        <path d="M79 36h16M78 43h16M77 50h12" fill="none" stroke-width="1.6"/>
+      </g>
+      <path class="sc-line" d="M10 150H230" style="stroke-width:1.6"/>
+    </svg>
+    <img class="media-el" id="tImg" alt="" hidden>
+    <video class="media-el" id="tVid" muted loop playsinline preload="none" hidden></video>
+    <p class="cap" id="teaserCap"></p>
+    </div>
+    <p class="abs"><b>abstract</b><span id="absText"></span></p>
+  </div>
+</div>
+
+<svg class="bot rest" viewBox="0 0 90 116" aria-hidden="true"><use href="#bot-wave"/></svg>
+
+<svg class="bot side" id="side" viewBox="0 0 120 64" aria-hidden="true">
+  <path d="M60 14V6" fill="none"/><circle cx="60" cy="4.5" r="3.5"/>
+  <rect x="32" y="14" width="56" height="44" rx="12"/>
+  <circle cx="49" cy="32" r="7" style="fill:#fff"/><circle cx="71" cy="32" r="7" style="fill:#fff"/>
+  <g id="pupils" stroke="none" style="fill:#17191e"><circle cx="49" cy="32" r="3.4"/><circle cx="71" cy="32" r="3.4"/></g>
+  <path d="M54 46q6 4 12 0" fill="none"/>
+  <rect x="17" y="51" width="18" height="13" rx="5"/><rect x="85" y="51" width="18" height="13" rx="5"/>
+</svg>
+
+<!-- cursor buddy -->
+<svg class="bot buddy" id="buddy" viewBox="0 0 48 48" aria-hidden="true">
+  <g id="buddyBody">
+    <path d="M24 10V5" fill="none" stroke-width="2"/><circle cx="24" cy="4" r="2.4" stroke-width="2"/>
+    <rect x="10" y="10" width="28" height="20" rx="6" stroke-width="2.2"/>
+    <g class="open" stroke="none" style="fill:#17191e"><circle cx="19" cy="20" r="2.4"/><circle cx="29" cy="20" r="2.4"/></g>
+    <g class="closed" fill="none" stroke-width="1.8"><path d="M16.5 20.5h5M26.5 20.5h5"/></g>
+    <g class="wheels"><rect x="12" y="32" width="24" height="8" rx="4" stroke-width="2.2"/><circle cx="17" cy="36" r="1.4" stroke="none" style="fill:var(--bot-line)"/><circle cx="31" cy="36" r="1.4" stroke="none" style="fill:var(--bot-line)"/></g>
+    <path d="M22 30v2M26 30v2" stroke-width="2"/>
+  </g>
+  <text class="zz" x="38" y="8">z</text>
+</svg>
+
+<!-- spot easter egg -->
+<svg class="bot spot" id="spot" viewBox="0 0 150 86" aria-hidden="true">
+  <g class="leg a" style="transform-origin:42px 46px"><path d="M42 46l-6 16l6 16" fill="none"/></g>
+  <g class="leg b" style="transform-origin:96px 46px"><path d="M96 46l6 16l-6 16" fill="none"/></g>
+  <rect x="30" y="28" width="76" height="22" rx="9"/>
+  <g class="leg b" style="transform-origin:48px 46px"><path d="M48 46l-6 16l6 16" fill="none"/></g>
+  <g class="leg a" style="transform-origin:102px 46px"><path d="M102 46l6 16l-6 16" fill="none"/></g>
+  <rect x="104" y="26" width="26" height="15" rx="5"/>
+  <circle cx="122" cy="33" r="2.3" stroke="none" style="fill:var(--bot-line)"/>
+  <path d="M60 28l6-14l20-4" fill="none"/><path d="M86 10l6-3M86 10l6 3" fill="none" stroke-width="2"/>
+</svg>
+
+<script>
+(function(){
+  const root=document.documentElement;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine=matchMedia('(pointer: fine)').matches;
+
+
+  /* light switch */
+  const sw=document.getElementById('lightSwitch'), poker=document.getElementById('poker'), lab=document.getElementById('switchLabel');
+  const isDark=()=>root.dataset.theme? root.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  const sync=()=>{const d=isDark();sw.setAttribute('aria-pressed',d);sw.setAttribute('aria-label',d?'Turn the lights on':'Turn the lights off');lab.textContent=d?'lights off':'lights';};
+  sync();
+  sw.addEventListener('click',()=>{
+    const flip=()=>{root.dataset.theme=isDark()?'light':'dark';sync();};
+    if(reduce){flip();return;}
+    poker.classList.add('in');setTimeout(flip,380);setTimeout(()=>poker.classList.remove('in'),700);
+  });
+
+
+  /* what the robot is doing today */
+  const doing={{ today_js|safe }}.map(d=>[d.text,d.source,'https://arxiv.org/abs/'+d.paper]);
+  const what=document.getElementById('what'), src=document.getElementById('src'); let wi=0;
+  if(what&&!reduce) setInterval(()=>{wi=(wi+1)%doing.length;const [w,sr,u]=doing[wi];
+    what.textContent=w;src.textContent=sr;src.href=u;
+    [what,src].forEach(e=>{e.classList.remove('swap');void e.offsetWidth;e.classList.add('swap');});},4200);
+
+  /* collaborator robots: generated from the name, so everyone gets their own */
+  const fills=['var(--sky)','var(--rose)','var(--mint)','var(--butter)'];
+  document.querySelectorAll('#crew a').forEach(a=>{
+    let h=0;for(const c of a.dataset.n)h=(h*31+c.charCodeAt(0))>>>0;
+    const f=fills[h%4], tall=h%3, eyes=(h>>3)%3, ant=(h>>5)%2;
+    const headH=[18,22,26][tall], y=36-headH;
+    const eye=[`<circle cx="18" cy="${y+headH/2}" r="2.4"/><circle cx="30" cy="${y+headH/2}" r="2.4"/>`,
+               `<rect x="15" y="${y+headH/2-2}" width="18" height="4" rx="2"/>`,
+               `<circle cx="24" cy="${y+headH/2}" r="3.4"/>`][eyes];
+    const top=ant?`<path d="M24 ${y}v-6" fill="none" stroke-width="2"/><circle cx="24" cy="${y-7}" r="2.4" stroke-width="2"/>`
+                 :`<path d="M17 ${y}l-3-5M31 ${y}l3-5" fill="none" stroke-width="2"/>`;
+    a.insertAdjacentHTML('beforeend',`<svg class="bot" viewBox="0 0 48 48" aria-hidden="true" style="fill:${f}">${top}<rect x="10" y="${y}" width="28" height="${headH}" rx="6" stroke-width="2.2"/><g stroke="none" style="fill:#17191e">${eye}</g><path d="M14 40h20" fill="none" stroke-width="2.2"/></svg>`);
+  });
+
+  /* failure of the month: play when visible, optional sound */
+  const fv=document.getElementById('failVid'), fs=document.getElementById('failSound');
+  if(fv){
+    if('IntersectionObserver' in window && !reduce){new IntersectionObserver(es=>es.forEach(e=>{e.isIntersecting?fv.play().catch(()=>{}):fv.pause();}),{threshold:.4}).observe(fv);}
+    fs.addEventListener('click',()=>{fv.muted=!fv.muted;fs.textContent=fv.muted?'sound on':'sound off';if(!fv.muted)fv.play().catch(()=>{});});
+  }
+
+  /* pointer tracking */
+  let mx=innerWidth/2,my=innerHeight/2,lastMove=0;
+  addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;lastMove=performance.now();
+    root.style.setProperty('--mx',mx+'px');root.style.setProperty('--my',my+'px');},{passive:true});
+
+  /* hover teaser */
+  const teaser=document.getElementById('teaser'), cap=document.getElementById('teaserCap');
+  const scenes={switch:'sceneSwitch',drawer:'sceneDrawer'}, absText=document.getElementById('absText');
+  const tImg=document.getElementById('tImg'), tVid=document.getElementById('tVid');
+  const FROM={'project page video':'clip from the project page','project page':'teaser from the project page','arXiv, Figure 1':'Figure 1 from the paper','arXiv source figure':'figure from the paper source','paper PDF figure':'figure from the paper','your override':'',doodle:'no figure found yet, so a doodle'};
+  let tOn=false;
+  document.querySelectorAll('.paper').forEach(p=>{
+    p.addEventListener('mouseenter',()=>{const d=p.dataset;
+      document.querySelectorAll('#teaser .scene').forEach(el=>el.toggleAttribute('hidden',true));
+      tImg.hidden=true;tVid.hidden=true;tVid.pause();
+      if(d.kind==='video'){tVid.src=d.src;tVid.poster=d.poster;tVid.hidden=false;tVid.play().catch(()=>{});}
+      else if(d.kind==='image'){tImg.src=d.src;tImg.hidden=false;}
+      else{document.getElementById(scenes[d.scene]||'sceneRead').removeAttribute('hidden');}
+      cap.textContent=FROM[d.from]??'';absText.textContent=d.abs||'Abstract not found yet. It appears after the next sync.';
+      tOn=true;teaser.classList.add('on');});
+    p.addEventListener('mouseleave',()=>{tOn=false;teaser.classList.remove('on');tVid.pause();});
+  });
+
+  /* shy side robot */
+  const side=document.getElementById('side'), pupils=document.getElementById('pupils');
+
+  /* cursor buddy */
+  const buddy=document.getElementById('buddy'), body=document.getElementById('buddyBody');
+  let bx=mx,by=my,face=1;
+
+  function frame(t){
+    // teaser follows cursor, clamped to the viewport
+    if(tOn){const w=teaser.offsetWidth,h=teaser.offsetHeight;
+      let x=mx+28,y=my+22; if(x+w>innerWidth-12)x=mx-w-28; if(y+h>innerHeight-12)y=Math.max(12,innerHeight-h-12);
+      teaser.style.transform=`translate(${x}px,${y}px) rotate(-1deg)`;}
+    // buddy trails behind the cursor
+    if(fine){
+      const tx=mx-54*face, ty=my+6, dx=tx-bx, dy=ty-by;
+      bx+=dx*(reduce?1:.08); by+=dy*(reduce?1:.08);
+      if(Math.abs(mx-bx)>60) face=mx>bx?1:-1;
+      body.style.transform=face<0?'translateX(48px) scaleX(-1)':'';
+      buddy.style.transform=`translate(${bx-21}px,${by-24}px)`;
+      buddy.classList.toggle('moving',Math.hypot(dx,dy)>3);
+      buddy.classList.toggle('sleep',t-lastMove>2600);
+    }
+    // side robot eyes
+    const r=side.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const ddx=mx-cx, ddy=my-cy, d=Math.hypot(ddx,ddy)||1;
+    pupils.setAttribute('transform',`translate(${(-ddy/d*3).toFixed(2)} ${(ddx/d*3).toFixed(2)})`);
+    side.classList.toggle('shy',d<130);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* type "spot" */
+  const spot=document.getElementById('spot'); let buf='';
+  addEventListener('keydown',e=>{
+    if(e.key.length!==1)return; buf=(buf+e.key.toLowerCase()).slice(-4);
+    if(buf==='spot'&&!spot.classList.contains('go')&&!reduce){spot.classList.add('go');}
+  });
+  spot.addEventListener('animationend',e=>{if(e.animationName==='trot')spot.classList.remove('go');});
+
+  /* sleepy footer after 22:00 Zurich */
+  try{const h=+new Intl.DateTimeFormat('en-GB',{hour:'numeric',hour12:false,timeZone:'Europe/Zurich'}).format(new Date());
+    if(h>=22||h<7){const s=document.createElement('span');s.className='zz';s.textContent='zZz · the robots are asleep in Zürich';document.getElementById('footer').append(s);}}catch(e){}
+
+  console.log('%chi! you found the robots\' console. Say hello: github.com/timengelbracht','font:14px sans-serif');
+})();
+</script>
+</body>
+</html>

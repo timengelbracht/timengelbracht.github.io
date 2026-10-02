@@ -1,0 +1,51 @@
+# Everything you might ever want to change by hand lives in this file (and in content/).
+# Papers are NOT listed here: `python -m sitegen sync` pulls them automatically every week.
+
+name: Tim Engelbracht
+greeting: "Hi, I'm Tim."
+bio: >-
+  I'm a PhD student in the Computer Vision and Geometry Group at ETH Zürich.
+  I work on robots that understand scenes by interacting with them:
+  [[mobile manipulation]], [[force-grounded perception]] and [[scene understanding]].
+now: bringing scene representations and contact forces into the context of robot policies.
+
+# Put your photo at assets/headshot.jpg (square works best). Until then a placeholder shows.
+headshot: assets/headshot.jpg
+
+links:
+  - { label: Scholar, url: "https://scholar.google.com/citations?user=YOUR_SCHOLAR_ID" }
+  - { label: GitHub, url: "https://github.com/timengelbracht" }
+  - { label: LinkedIn, url: "https://www.linkedin.com/in/timengelbracht/" }
+  - { label: CV, url: "assets/cv.pdf" }
+
+# ---- where papers come from -------------------------------------------------
+sources:
+  # Your Google Scholar user id (the part after "user=" in your profile URL).
+  # Leave empty to skip Scholar; Semantic Scholar is then the only list.
+  google_scholar_id: ""
+  # Semantic Scholar sometimes splits one person into several profiles.
+  # List every profile id that is you. Find them at semanticscholar.org.
+  semantic_scholar_ids: ["2363878466"]
+  # Papers the lists above miss (arXiv ids). Optional.
+  extra_arxiv_ids: ["2409.11870"]   # SpotLight is not on the Semantic Scholar profile yet
+  # Titles (or arXiv ids) you never want on the site. Optional.
+  exclude: []
+
+# Where your own project pages usually live; {short} is the paper's short name
+# (e.g. "SpotLight"). Used only when no project page is linked from the paper itself.
+project_page_guesses: ["https://timengelbracht.github.io/{short}/"]
+
+# Your name as it appears in author lists, so it can be underlined.
+my_author_names: ["Tim Engelbracht", "T. Engelbracht"]
+
+# ---- collaborators ------------------------------------------------------------
+# Only people listed here appear on the site. The sync prints co-authors that are
+# not listed yet, so you can decide. `url` is optional and should be their own page.
+collaborators:
+  - { name: René Zurbrügg }
+  - { name: Hermann Blum }
+  - { name: Zuria Bauer }
+  - { name: Matteo Wohlrapp }
+  - { name: Martin Büchner }
+  - { name: Abhinav Valada }
+  - { name: Marc Pollefeys }

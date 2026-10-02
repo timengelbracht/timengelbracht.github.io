@@ -1,0 +1,14 @@
+# "today the robot is ..." — every number must come from a paper.
+# `paper` is the arXiv id; the site links the source tag to it.
+# Optional: leave this file empty and the line simply disappears.
+- { text: "pressing light switches, up to 84% successfully", source: "SpotLight, abstract", paper: "2409.11870" }
+- { text: "pressing light switches from far away and at an angle: 68% success", source: "SpotLight, Table II", paper: "2409.11870" }
+- { text: "testing 9 kinds of light switches, 10 tries each", source: "SpotLight, experiments", paper: "2409.11870" }
+- { text: "flipping through 715 photos of light switches", source: "SpotLight, abstract", paper: "2409.11870" }
+- { text: "rewatching 3048 recordings of people opening things", source: "Hoi!, abstract", paper: "2512.04884" }
+- { text: "visiting 381 articulated objects in 38 environments", source: "Hoi!, abstract", paper: "2512.04884" }
+- { text: "binge-watching 48 hours of interactions", source: "Hoi!, Table 1", paper: "2512.04884" }
+- { text: "opening ovens with a learned force prior: 80% success", source: "Hoi!, Spot experiment", paper: "2512.04884" }
+- { text: "opening dishwashers with a learned force prior: 60% success. Still practicing.", source: "Hoi!, Spot experiment", paper: "2512.04884" }
+- { text: "handling 9 object-robot pairs with a physics-informed digital twin: 87% goal completion", source: "ForceTwin, abstract", paper: "2609.21751" }
+- { text: "tracking 600 object interactions in 62 in-the-wild recordings", source: "MoMa-SG, abstract", paper: "2602.16356" }

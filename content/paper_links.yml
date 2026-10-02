@@ -1,0 +1,8 @@
+# Optional. Only for the rare paper where the automatic lookup misses something.
+# Key: the paper's slug (its short name in lowercase, e.g. "crocodl", "spot-on") or its arXiv id.
+# Fields: project, code, video, data, paper, authors, abstract, venue, hide: true
+# Links written here are used as they are (they are not re-checked).
+#
+# crocodl:
+#   project: https://localizoo.com/crocodl/
+{}

@@ -1,0 +1,5 @@
+# Newest first. The only list you update by hand.
+- { date: "Oct 2026", text: "Started my PhD at CVG, ETH Zürich." }
+- { date: "2026", text: "Finished my MSc in Robotics at ETH Zürich." }
+- { date: "Dec 2025", text: "Hoi! is on arXiv: 3048 recordings of people opening things, with forces and touch." }
+- { date: "2024", text: "SpotLight is on arXiv. The robot now knows which switch turns on which lamp." }

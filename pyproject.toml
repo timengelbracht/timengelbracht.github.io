@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sitegen"
+version = "0.1.0"
+description = "Tim Engelbracht's personal website: a static site whose paper list updates itself."
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{ name = "Tim Engelbracht" }]
+dependencies = [
+    "requests>=2.31",
+    "beautifulsoup4>=4.12",
+    "pyyaml>=6.0",
+    "jinja2>=3.1",
+    "pillow>=10.0",
+    "imageio-ffmpeg>=0.4.9",  # bundled ffmpeg for teaser and failure videos
+    "pymupdf>=1.23",          # figures from paper PDFs
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff>=0.4"]
+
+[project.scripts]
+sitegen = "sitegen.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+sitegen = ["templates/*.j2"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py38"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E731", "UP006", "UP007", "UP035"]  # keep 3.8-friendly annotations

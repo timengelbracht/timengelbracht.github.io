@@ -1,0 +1,236 @@
+{
+  "synced": "2026-10-02",
+  "papers": [
+    {
+      "title": "ForceTwin: Physics-informed Digital Twins for Robotic Manipulation from Instrumented Human Interaction",
+      "year": 2026,
+      "date": "2026-09-18",
+      "authors": [
+        "Tim Engelbracht",
+        "René Zurbrügg",
+        "Mayank Mittal",
+        "Marco Hutter",
+        "Marc Pollefeys",
+        "Hermann Blum",
+        "Zuria Bauer"
+      ],
+      "abstract": "Manipulating objects requires understanding not only their motion, but also the physical properties that determine it. For articulated objects, these include inertia, friction, and mechanisms such as springs or door closers, whose effects can vary with configuration and velocity. Such properties are not directly observable from appearance: visually identical doors may require very different effort to manipulate. Existing digital-twin pipelines recover primarily kinematics or assign static physical parameters from visual and language priors, which can yield physically implausible estimates. As a result, state-dependent mechanism dynamics remain unidentified and are not represented in standard asset formats. We present ForceTwin, a system for identifying physics-informed digital twins of articulated objects from instrumented human interaction. A person probes an object using a handheld force-sensing gripper, providing synchronized poses and interaction forces from which we estimate the articulation, parametric dynamics including inertia, Coulomb friction, viscous damping, and a structured neural residual capturing state-dependent mechanism forces. ForceTwin nearly halves the inertial-parameter error of a VLM prior. As a feedforward dynamics model for impedance control on a Spot and a Franka FR3, ForceTwin achieves 87% goal completion across nine object-embodiment pairs, compared with 60% using VLM-prior and 57% using kinematics-only twins, with the largest gains on objects whose strong mechanisms cause both baselines to stall. We further use the identified twins to train whole-body door-traversal policies and deploy them in the real world. Project Page: https://timengelbracht.github.io/forcetwin-website/",
+      "arxiv": "2609.21751",
+      "s2_url": "https://www.semanticscholar.org/paper/838bac113309511719c3839335f4c9cb59a184dd",
+      "links": {
+        "project": "https://timengelbracht.github.io/forcetwin-website/",
+        "arxiv": "https://arxiv.org/abs/2609.21751"
+      },
+      "arxiv_url": "https://arxiv.org/abs/2609.21751",
+      "slug": "forcetwin",
+      "teaser": {
+        "kind": "image",
+        "src": "assets/teasers/forcetwin.webp",
+        "from": "project page"
+      }
+    },
+    {
+      "title": "LIME: Learning Intent-aware Camera Motion from Egocentric Video",
+      "year": 2026,
+      "date": "2026-07-02",
+      "venue": "arXiv.org",
+      "authors": [
+        "Boyang Sun",
+        "Jiajie Li",
+        "Yung-Hsu Yang",
+        "Chenyangguang Zhang",
+        "Tim Engelbracht",
+        "Sunghwan Hong",
+        "Cesar Cadena",
+        "Marc Pollefeys",
+        "Hermann Blum"
+      ],
+      "abstract": "Autonomous robots often need to move their camera before they can act: to inspect an object, reveal an occluded region, or obtain a view that responds to a user's intent. While vision-language navigation translates instructions to base motion and vision-language-action policies map instructions to manipulation actions, language-conditioned camera motion remains comparatively underexplored as a first-class action. We formulate language-conditioned camera motion generation: given a current RGB observation and a free-form natural-language intent, predict a relative target camera pose for the next observation. This task is inherently non-trivial: viewpoint changes are driven by latent perceptual intentions, and a valid motion may operate at different semantic granularity, from entering a room to looking around a corner, inspecting a visible object, or revealing an occluded detail. To model this structure, we mine multi-intention camera-motion supervision from egocentric video, pairing plausible intents and observation-gain descriptions with relative SE(3) target poses. We propose LIME, a vision-language camera-motion generator that combines an auto-regressive observation-gain output with a continuous flow-matching pose head. This design lets the model jointly predict what the next view should reveal while representing multi-hypothesis target views. Across experiments and downstream robotic tasks, we show that LIME can learn to actively choose camera poses from passive human video, turning ordinary egocentric recordings into supervision for intent-aware active perception.",
+      "arxiv": "2607.02417",
+      "doi": "10.48550/arXiv.2607.02417",
+      "s2_url": "https://www.semanticscholar.org/paper/c467ad37384c6faec8034fb13e14a8c000980799",
+      "links": {
+        "project": "https://boysun045.github.io/LIME-Page/",
+        "arxiv": "https://arxiv.org/abs/2607.02417"
+      },
+      "arxiv_url": "https://arxiv.org/abs/2607.02417",
+      "paper_url": "https://doi.org/10.48550/arXiv.2607.02417",
+      "slug": "lime",
+      "teaser": {
+        "kind": "image",
+        "src": "assets/teasers/lime.webp",
+        "from": "project page"
+      }
+    },
+    {
+      "title": "Articulated 3D Scene Graphs for Open-World Mobile Manipulation",
+      "year": 2026,
+      "date": "2026-02-18",
+      "venue": "arXiv.org",
+      "authors": [
+        "Martin Büchner",
+        "Adrian Röfer",
+        "Tim Engelbracht",
+        "Tim Welschehold",
+        "Zuria Bauer",
+        "Hermann Blum",
+        "Marc Pollefeys",
+        "Abhinav Valada"
+      ],
+      "abstract": "Semantics has enabled 3D scene understanding and affordance-driven object interaction. However, robots operating in real-world environments face a critical limitation: they cannot anticipate how objects move. Long-horizon mobile manipulation requires closing the gap between semantics, geometry, and kinematics. In this work, we present MoMa-SG, a novel framework for building semantic-kinematic 3D scene graphs of articulated scenes containing a myriad of interactable objects. Given RGB-D sequences containing multiple object articulations, we temporally segment object interactions and infer object motion using occlusion-robust point tracking. We then lift point trajectories into 3D and estimate articulation models using a novel unified twist estimation formulation that robustly estimates revolute and prismatic joint parameters in a single optimization pass. Next, we associate objects with estimated articulations and detect contained objects by reasoning over parent-child relations at identified opening states. We also introduce the novel Arti4D-Semantic dataset, which uniquely combines hierarchical object semantics including parent-child relation labels with object axis annotations across 62 in-the-wild RGB-D sequences containing 600 object interactions and three distinct observation paradigms. We extensively evaluate the performance of MoMa-SG on two datasets and ablate key design choices of our approach. In addition, real-world experiments on both a quadruped and a mobile manipulator demonstrate that our semantic-kinematic scene graphs enable robust manipulation of articulated objects in everyday home environments.",
+      "arxiv": "2602.16356",
+      "doi": "10.48550/arXiv.2602.16356",
+      "s2_url": "https://www.semanticscholar.org/paper/767fc4f272a16ca70c4a84237c1bc6bbcdc02f0c",
+      "links": {
+        "arxiv": "https://arxiv.org/abs/2602.16356"
+      },
+      "arxiv_url": "https://arxiv.org/abs/2602.16356",
+      "paper_url": "https://doi.org/10.48550/arXiv.2602.16356",
+      "slug": "articulated-3d-scene-graphs-for-open-wor",
+      "teaser": {
+        "kind": "image",
+        "src": "assets/teasers/articulated-3d-scene-graphs-for-open-wor.webp",
+        "from": "arXiv source figure"
+      }
+    },
+    {
+      "title": "Hoi! - A Multimodal Dataset for Force-Grounded, Cross-View Articulated Manipulation",
+      "year": 2025,
+      "date": "2025-12-04",
+      "venue": "arXiv.org",
+      "authors": [
+        "Tim Engelbracht",
+        "René Zurbrügg",
+        "Matteo Wohlrapp",
+        "Martin Büchner",
+        "Abhinav Valada",
+        "Marc Pollefeys",
+        "Hermann Blum",
+        "Zuria Bauer"
+      ],
+      "abstract": "We present a dataset for force-grounded, cross-view articulated manipulation that couples what is seen with what is done and what is felt during real human interaction. The dataset contains 3048 sequences across 381 articulated objects in 38 environments. Each object is operated in four embodiments - (i) human hand, (ii) human hand with a wrist-mounted camera, (iii) handheld UMI gripper, and (iv) a custom Hoi! gripper, where the tool embodiment provides end-effector forces and tactile sensing. Our dataset offers a holistic view of interaction understanding from video, enabling researchers to evaluate how well methods transfer between human and robotic viewpoints, but also investigate underexplored modalities such as interaction forces.",
+      "arxiv": "2512.04884",
+      "doi": "10.48550/arXiv.2512.04884",
+      "s2_url": "https://www.semanticscholar.org/paper/711572978e2020588509da995605c7424c5c5c51",
+      "links": {
+        "project": "https://timengelbracht.github.io/Hoi-Dataset-Website/",
+        "arxiv": "https://arxiv.org/abs/2512.04884"
+      },
+      "arxiv_url": "https://arxiv.org/abs/2512.04884",
+      "paper_url": "https://doi.org/10.48550/arXiv.2512.04884",
+      "slug": "hoi",
+      "teaser": {
+        "kind": "image",
+        "src": "assets/teasers/hoi.webp",
+        "from": "project page"
+      }
+    },
+    {
+      "title": "CroCoDL: Cross-device Collaborative Dataset for Localization",
+      "year": 2025,
+      "date": "2025-06-10",
+      "venue": "Computer Vision and Pattern Recognition",
+      "authors": [
+        "Hermann Blum",
+        "A. Mercurio",
+        "Joshua O'Reilly",
+        "Tim Engelbracht",
+        "Mihai Dusmanu",
+        "Marc Pollefeys",
+        "Z. Bauer"
+      ],
+      "abstract": "Accurate localization plays a pivotal role in the autonomy of systems operating in unfamiliar environments, particularly when interaction with humans is expected. High-accuracy visual localization systems encompass various components, such as image retrievers, feature extractors, matchers, reconstruction and pose estimation methods. This complexity translates to the necessity of robust evaluation settings and pipelines. However, existing datasets and benchmarks primarily focus on single-agent scenarios, overlooking the critical issue of cross-device localization. Different agents with different sensors will show their own specific strengths and weaknesses, and the data they have available varies substantially. This work addresses this gap by enhancing an existing augmented reality visual localization benchmark with data from legged robots, and evaluating human-robot, cross-device mapping and localization. Our contributions extend beyond device diversity and include high environment variability, spanning ten distinct locations ranging from disaster sites to art exhibitions. Each scene in our dataset features recordings from robot agents, hand-held and head-mounted devices, and high-accuracy ground truth LiDAR scanners, resulting in a comprehensive multi-agent dataset and benchmark. This work represents a significant advancement in the field of visual localization benchmarking, with key in-sights into the performance of cross-device localization methods across diverse settings.",
+      "doi": "10.1109/CVPR52734.2025.02554",
+      "s2_url": "https://www.semanticscholar.org/paper/c382f4d4f6f64d895fe9ee5e44e0160e35a31d46",
+      "links": {
+        "paper": "https://doi.org/10.1109/CVPR52734.2025.02554"
+      },
+      "arxiv": null,
+      "paper_url": "https://doi.org/10.1109/CVPR52734.2025.02554",
+      "slug": "crocodl",
+      "teaser": {
+        "kind": "doodle",
+        "scene": "graph",
+        "from": "doodle"
+      }
+    },
+    {
+      "title": "Spot-On: A Mixed Reality Interface for Multi-Robot Cooperation",
+      "year": 2025,
+      "date": "2025-05-28",
+      "venue": "arXiv.org",
+      "authors": [
+        "Tim Engelbracht",
+        "Petar Lukovic",
+        "Tjark Behrens",
+        "Kai Lascheit",
+        "René Zurbrügg",
+        "Marc Pollefeys",
+        "Hermann Blum",
+        "Zuria Bauer"
+      ],
+      "abstract": "Recent progress in mixed reality (MR) and robotics is enabling increasingly sophisticated forms of human-robot collaboration. Building on these developments, we introduce a novel MR framework that allows multiple quadruped robots to operate in semantically diverse environments via a MR interface. Our system supports collaborative tasks involving drawers, swing doors, and higher-level infrastructure such as light switches. A comprehensive user study verifies both the design and usability of our app, with participants giving a \"good\" or \"very good\" rating in almost all cases. Overall, our approach provides an effective and intuitive framework for MR-based multi-robot collaboration in complex, real-world scenarios.",
+      "arxiv": "2505.22539",
+      "doi": "10.48550/arXiv.2505.22539",
+      "s2_url": "https://www.semanticscholar.org/paper/4f5568d2ff4d1c63374af6a7cdb55a0698150a7b",
+      "links": {
+        "arxiv": "https://arxiv.org/abs/2505.22539"
+      },
+      "arxiv_url": "https://arxiv.org/abs/2505.22539",
+      "paper_url": "https://doi.org/10.48550/arXiv.2505.22539",
+      "slug": "spot-on",
+      "teaser": {
+        "kind": "image",
+        "src": "assets/teasers/spot-on.webp",
+        "from": "arXiv source figure"
+      }
+    },
+    {
+      "title": "SpotLight: Robotic Scene Understanding through Interaction and Affordance Detection",
+      "abstract": "Despite increasing research efforts on household robotics, robots intended for deployment in domestic settings still struggle with more complex tasks such as interacting with functional elements like drawers or light switches, largely due to limited task-specific understanding and interaction capabilities. These tasks require not only detection and pose estimation but also an understanding of the affordances these elements provide. To address these challenges and enhance robotic scene understanding, we introduce SpotLight: A comprehensive framework for robotic interaction with functional elements, specifically light switches. Furthermore, this framework enables robots to improve their environmental understanding through interaction. Leveraging VLM-based affordance prediction to estimate motion primitives for light switch interaction, we achieve up to 84% operation success in real world experiments. We further introduce a specialized dataset containing 715 images as well as a custom detection model for light switch detection. We demonstrate how the framework can facilitate robot learning through physical interaction by having the robot explore the environment and discover previously unknown relationships in a scene graph representation. Lastly, we propose an extension to the framework to accommodate other functional interactions such as swing doors, showcasing its flexibility. Videos and Code: timengelbracht.github.io/SpotLight/",
+      "authors": [
+        "Tim Engelbracht",
+        "René Zurbrügg",
+        "Marc Pollefeys",
+        "Hermann Blum",
+        "Zuria Bauer"
+      ],
+      "date": "2024-09-18",
+      "arxiv": "2409.11870",
+      "links": {
+        "project": "https://timengelbracht.github.io/SpotLight/",
+        "arxiv": "https://arxiv.org/abs/2409.11870",
+        "code": "https://github.com/timengelbracht/Spot-Light",
+        "video": "https://youtu.be/Vw7gLxTEJkE"
+      },
+      "arxiv_url": "https://arxiv.org/abs/2409.11870",
+      "year": 2024,
+      "slug": "spotlight",
+      "teaser": {
+        "kind": "video",
+        "src": "assets/teasers/spotlight.mp4",
+        "poster": "assets/teasers/spotlight.webp",
+        "from": "project page video"
+      }
+    }
+  ],
+  "unlisted_coauthors": {
+    "Mayank Mittal": 1,
+    "Marco Hutter": 1,
+    "Boyang Sun": 1,
+    "Jiajie Li": 1,
+    "Yung-Hsu Yang": 1,
+    "Chenyangguang Zhang": 1,
+    "Sunghwan Hong": 1,
+    "Cesar Cadena": 1,
+    "Adrian Röfer": 2,
+    "Tim Welschehold": 2,
+    "A. Mercurio": 1,
+    "Joshua O'Reilly": 1,
+    "Mihai Dusmanu": 1,
+    "Z. Bauer": 1,
+    "Petar Lukovic": 1,
+    "Tjark Behrens": 1,
+    "Kai Lascheit": 1
+  }
+}
