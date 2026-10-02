@@ -271,7 +271,7 @@ body>svg:first-of-type{position:absolute}
     </figure>
     <h1>{{ cfg.greeting }}</h1>
     <p class="lead">{{ bio_html|safe }}</p>
-    <p class="now"><b>now:</b> {{ cfg.now }}</p>
+    {% if cfg.now %}<p class="now"><b>now:</b> {{ cfg.now }}</p>{% endif %}
     <div class="links">{% if email %}<a href="#contact">Email</a>{% endif %}{% for l in cfg.links %}<a href="{{ l.url }}" target="_blank" rel="noopener">{{ l.label }}</a>{% endfor %}</div>
     {% if today %}<div class="today" aria-live="polite">
       <svg class="bot" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 10V5" fill="none" stroke-width="2"/><circle cx="24" cy="4" r="2.4" stroke-width="2"/><rect x="10" y="10" width="28" height="20" rx="6" stroke-width="2.2"/><circle cx="19" cy="20" r="2.4" stroke="none" style="fill:#17191e"/><circle cx="29" cy="20" r="2.4" stroke="none" style="fill:#17191e"/><rect x="12" y="32" width="24" height="8" rx="4" stroke-width="2.2"/></svg>

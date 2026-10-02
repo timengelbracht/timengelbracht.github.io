@@ -9,7 +9,9 @@ bio: >-
   supervised by Prof. Marc Pollefeys and Prof. Stefan Leutenegger.
   I work on robots that understand scenes by interacting with them:
   [[mobile manipulation]], [[force-grounded perception]] and [[scene understanding]].
-now: bringing scene representations and contact forces into the context of robot policies.
+# Optional "now:" line under the bio (left out while empty), e.g.
+#   now: bringing scene representations and contact forces into the context of robot policies.
+now: ""
 
 # Short line used for link previews (Slack, LinkedIn, X) and search engines.
 tagline: Doctoral Fellow at the ETH AI Center and ETH Zürich, working on robots that understand scenes by interacting with them.
