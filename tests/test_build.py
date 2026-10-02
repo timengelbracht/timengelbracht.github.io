@@ -9,7 +9,8 @@ def test_build_renders_every_paper(repo):
         assert p["title"].split(":")[0] in html
     assert "co-authors" not in html          # never a placeholder author line
     assert "failure of the month" in html
-    assert "photo coming soon" in html       # headshot placeholder until assets/headshot.jpg exists
+    has_photo = (repo.root / "assets/headshot.jpg").exists()
+    assert ("photo coming soon" in html) != has_photo  # placeholder only until the photo exists
     assert 'id="buddy"' not in html          # cursor robot is off unless cursor_robot: true
 
 
