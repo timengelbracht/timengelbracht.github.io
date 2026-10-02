@@ -9,6 +9,9 @@ bio: >-
   [[mobile manipulation]], [[force-grounded perception]] and [[scene understanding]].
 now: bringing scene representations and contact forces into the context of robot policies.
 
+# The little robot that follows the mouse. Off to keep the page calm.
+cursor_robot: false
+
 # Put your photo at assets/headshot.jpg (square works best). Until then a placeholder shows.
 headshot: assets/headshot.jpg
 

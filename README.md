@@ -22,10 +22,10 @@ make test               # offline tests
 
 | File | What it controls |
 |---|---|
-| `config.yml` | name, bio (`[[keyword]]` gets a hand-drawn underline), "now" line, links, collaborators, where papers come from |
+| `config.yml` | `cursor_robot: true/false` (the robot following the mouse, off by default), name, bio (`[[keyword]]` gets a hand-drawn underline), "now" line, links, collaborators, where papers come from |
 | `content/news.yml` | news list |
 | `content/robot_today.yml` | "today the robot is …" lines. Every number must come from a paper; `source` says where |
-| `content/failures.yml` | failure of the month (newest first). Add one with `.venv/bin/sitegen add-failure clip.mov "November 2026" --caption "…"` |
+| `content/failures.yml` | failure of the month (newest first). Add one with `.venv/bin/sitegen add-failure clip.mov --title "…" --caption "…"` (no date is shown, so it never goes stale) |
 | `content/paper_links.yml` | optional fixes for a single paper (missing project page, hide a paper, …) |
 | `assets/headshot.jpg` | your photo; a placeholder shows until it exists |
 | `assets/cv.pdf` | your CV (linked from the header) |

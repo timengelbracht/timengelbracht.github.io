@@ -10,6 +10,7 @@ def test_build_renders_every_paper(repo):
     assert "co-authors" not in html          # never a placeholder author line
     assert "failure of the month" in html
     assert "photo coming soon" in html       # headshot placeholder until assets/headshot.jpg exists
+    assert 'id="buddy"' not in html          # cursor robot is off unless cursor_robot: true
 
 
 def test_unknown_authors_render_nothing():
@@ -20,3 +21,8 @@ def test_unknown_authors_render_nothing():
 def test_my_name_is_underlined():
     out = build.authors_html({"authors": ["Tim Engelbracht", "René Zurbrügg"]}, {"timengelbracht"})
     assert out.startswith("<u>Tim Engelbracht</u>")
+
+
+def test_cursor_robot_can_be_switched_on(repo):
+    repo.config.write_text(repo.config.read_text().replace("cursor_robot: false", "cursor_robot: true"))
+    assert 'id="buddy"' in build.run(repo).read_text()

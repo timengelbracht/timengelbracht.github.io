@@ -1,8 +1,6 @@
-# Failure of the month. Newest first; only the first one is shown big,
-# older ones become small links. Drop the video in assets/failures/.
-# Tip: python -m sitegen add-failure clip.mov "November 2026" --caption "..." does the compressing for you.
-- month: October 2026
-  video: assets/failures/2026-10.mp4
+# Failure of the month. The first entry is shown; older ones become small links.
+# Add one with:  sitegen add-failure clip.mov --caption "..." --title "..."
+- video: assets/failures/2026-10.mp4
   poster: assets/failures/2026-10.webp
   title: "The door won."
-  caption: "Spot grabs the handle, pulls, loses its grip and backs off down the hallway. The door stays closed."
+  caption: "Spot lost. Tim was stressing."

@@ -269,7 +269,7 @@ body>svg:first-of-type{position:absolute}
   </section>
 
   {% if failures %}{% set f = failures[0] %}<section class="fail" aria-labelledby="fail-h">
-    <h2 id="fail-h"><small>failure of the month</small>{{ f.month }}</h2>
+    <h2 id="fail-h">failure of the month</h2>
     <figure>
       <div class="vid">
         <video id="failVid" src="{{ f.video }}" poster="{{ f.poster }}" muted loop playsinline preload="metadata" controls></video>
@@ -277,7 +277,7 @@ body>svg:first-of-type{position:absolute}
       </div>
       <figcaption>{% if f.title %}<b>{{ f.title }}</b> {% endif %}{{ f.caption }}</figcaption>
     </figure>
-    {% if failures|length > 1 %}<p class="older">earlier failures: {% for o in failures[1:] %}<a href="{{ o.video }}" target="_blank" rel="noopener">{{ o.month }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %}
+    {% if failures|length > 1 %}<p class="older">earlier failures: {% for o in failures[1:] %}<a href="{{ o.video }}" target="_blank" rel="noopener">{{ o.title or o.month or "#" ~ loop.index }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %}
   </section>{% endif %}
 
   <footer id="footer">
@@ -350,7 +350,8 @@ body>svg:first-of-type{position:absolute}
   <rect x="17" y="51" width="18" height="13" rx="5"/><rect x="85" y="51" width="18" height="13" rx="5"/>
 </svg>
 
-<!-- cursor buddy -->
+{# Cursor robot: switched off to reduce visual clutter. Set `cursor_robot: true` in config.yml to bring it back. #}
+{% if cfg.cursor_robot %}<!-- cursor buddy -->
 <svg class="bot buddy" id="buddy" viewBox="0 0 48 48" aria-hidden="true">
   <g id="buddyBody">
     <path d="M24 10V5" fill="none" stroke-width="2"/><circle cx="24" cy="4" r="2.4" stroke-width="2"/>
@@ -362,6 +363,7 @@ body>svg:first-of-type{position:absolute}
   </g>
   <text class="zz" x="38" y="8">z</text>
 </svg>
+{% endif %}
 
 <!-- spot easter egg -->
 <svg class="bot spot" id="spot" viewBox="0 0 150 86" aria-hidden="true">
@@ -458,7 +460,7 @@ body>svg:first-of-type{position:absolute}
       let x=mx+28,y=my+22; if(x+w>innerWidth-12)x=mx-w-28; if(y+h>innerHeight-12)y=Math.max(12,innerHeight-h-12);
       teaser.style.transform=`translate(${x}px,${y}px) rotate(-1deg)`;}
     // buddy trails behind the cursor
-    if(fine){
+    if(buddy&&fine){
       const tx=mx-54*face, ty=my+6, dx=tx-bx, dy=ty-by;
       bx+=dx*(reduce?1:.08); by+=dy*(reduce?1:.08);
       if(Math.abs(mx-bx)>60) face=mx>bx?1:-1;

@@ -45,7 +45,6 @@ def main(argv=None) -> None:
         sp.add_argument("--no-open", action="store_true", help="don't open the browser")
     fp = sub.add_parser("add-failure", help="add a failure-of-the-month video")
     fp.add_argument("video", type=Path)
-    fp.add_argument("month", help='e.g. "November 2026"')
     fp.add_argument("--caption", default="")
     fp.add_argument("--title", default="")
     args = ap.parse_args(argv)
@@ -62,7 +61,7 @@ def main(argv=None) -> None:
         build.run(paths)
         serve(paths, args.port, not args.no_open)
     elif args.cmd == "add-failure":
-        failures.add(paths, args.video, args.month, args.caption, args.title)
+        failures.add(paths, args.video, args.caption, args.title)
         build.run(paths)
 
 
