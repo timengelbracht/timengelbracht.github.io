@@ -40,7 +40,7 @@ def test_venues_from_paper_links_show_without_sync(repo):
 def test_contact_themes_and_link_previews(repo):
     html = build.run(repo).read_text()
     assert "tengelbracht [at] ethz.ch" in html and "tengelbracht@ethz.ch" not in html  # no plain address
-    assert "what I work on" in html and "Work with me" in html
+    assert "what I work on" in html and "let&#39;s connect!" in html and "this could be us" in html
     assert 'href="#p-hoi"' in html and 'id="p-hoi"' in html                         # theme -> paper links
     assert 'property="og:image" content="https://timengelbracht.github.io/assets/social.png"' in html
     assert "YOUR_SCHOLAR_ID" not in html                                              # placeholder link hidden

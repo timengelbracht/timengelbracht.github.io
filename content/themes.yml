@@ -34,9 +34,9 @@ themes:
 
 # Shown under the themes. Leave `projects` empty to show only the open call.
 open_call:
-  title: Work with me
+  title: let's connect!
   text: >-
-    I supervise Bachelor's, Master's and semester projects at ETH Zürich on these topics,
-    and I'm always happy to talk to researchers working on related problems.
-    If you'd like to work together, write me a few lines about what you have in mind.
+    Looking for a Bachelor's, Master's or semester project at ETH Zürich, or working on
+    something related? I'd love to hear from you. Drop me a few lines about what you have in mind.
+  meme: this could be us >-<   # caption under the doodle of a human and a robot carrying a box together
   projects: []   # e.g. - { title: "Force-aware door opening on Spot", type: "MSc / semester project" }

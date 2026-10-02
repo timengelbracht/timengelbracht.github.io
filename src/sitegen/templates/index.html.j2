@@ -114,10 +114,17 @@ h2{font-family:var(--f-hand);font-weight:500;font-size:15px;color:var(--muted);m
 .paper:target{background:var(--hover);box-shadow:inset 3px 0 0 var(--butter)}
 
 /* work with me */
-.call{position:relative;border:1.5px dashed var(--muted);border-radius:12px;padding:20px 22px 18px 22px}
+.call{position:relative;border:1.5px dashed var(--muted);border-radius:12px;padding:20px 22px 18px 22px;display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:10px 22px;align-items:center}
+.call-text{min-width:0}
+.us{margin:0;display:flex;flex-direction:column;align-items:center;gap:2px}
+.us svg{width:100%;max-width:220px;overflow:visible;stroke:var(--bot-line);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.us figcaption{font:700 17px var(--f-hand);color:var(--fg);transform:rotate(-3deg)}
+.us .spark{transform-origin:128px 30px;animation:beat 1.6s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.18)}30%{transform:scale(1)}}
+@media (max-width:620px){.call{grid-template-columns:1fr}.us{order:-1}.us svg{max-width:200px}}
+@media (prefers-reduced-motion:reduce){.us .spark{animation:none}}
 .call h2{font-family:var(--f-hand);font-weight:700;font-size:19px;color:var(--fg);margin:0 0 8px}
 .call p{margin:0 0 10px}
-.call .wave{position:absolute;right:16px;top:-46px;width:52px;fill:var(--mint)}
 .call .projects{margin:0 0 12px;padding-left:18px;display:flex;flex-direction:column;gap:6px}
 .call .mail{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:4px 0 0}
 .call .email{font:500 16px var(--f-mono)}
@@ -334,7 +341,7 @@ body>svg:first-of-type{position:absolute}
   </section>
 
   {% if open_call or email %}<section class="call" id="contact" aria-labelledby="call-h">
-    <svg class="bot wave" viewBox="0 0 90 116" aria-hidden="true"><use href="#bot-wave"/></svg>
+    <div class="call-text">
     <h2 id="call-h">{{ (open_call or {}).title or "contact" }}</h2>
     {% if open_call and open_call.text %}<p>{{ open_call.text }}</p>{% endif %}
     {% if open_call and open_call.projects %}<ul class="projects">{% for pr in open_call.projects %}<li><b>{{ pr.title }}</b>{% if pr.type %} <span class="tag">{{ pr.type }}</span>{% endif %}{% if pr.text %}<br><span>{{ pr.text }}</span>{% endif %}</li>{% endfor %}</ul>{% endif %}
@@ -343,6 +350,32 @@ body>svg:first-of-type{position:absolute}
       <button class="tag copy-mail" type="button">copy</button>
     </p>{% endif %}
     {% if cfg.office %}<p class="office">{{ cfg.office }}</p>{% endif %}
+    </div>
+    {% if open_call and open_call.meme %}
+    <figure class="us" aria-label="A person and a robot carrying a box together">
+      <svg viewBox="0 0 260 150" aria-hidden="true">
+        <g class="spark"><path d="M128 30c-4-7-13-3-9 4l9 8l9-8c4-7-5-11-9-4z" style="fill:var(--rose-ink)"/><path d="M104 24l-5-6M152 24l5-6M128 14v-7" fill="none"/></g>
+        <path d="M14 140H246" fill="none" stroke-width="1.6"/>
+        <circle cx="58" cy="32" r="14" style="fill:var(--rose)"/>
+        <circle cx="53" cy="31" r="2.2" style="fill:#17191e" stroke="none"/><circle cx="63" cy="31" r="2.2" style="fill:#17191e" stroke="none"/>
+        <path d="M53 38q5 4 10 0" fill="none"/>
+        <path d="M44 24q6-12 22-6" fill="none"/>
+        <rect x="44" y="50" width="28" height="46" rx="10" style="fill:var(--sky)"/>
+        <path d="M52 96l-4 42M64 96l5 42M43 138h9M66 138h9" fill="none"/>
+        <path d="M70 60q18 4 30 16" fill="none"/>
+        <rect x="98" y="62" width="64" height="44" rx="3" style="fill:var(--butter)"/>
+        <path d="M98 76h64M130 62v14" fill="none" stroke-width="1.6"/>
+        <path d="M200 18V10" fill="none"/><circle cx="200" cy="8" r="3"/>
+        <rect x="180" y="18" width="40" height="30" rx="9" style="fill:var(--mint)"/>
+        <circle cx="193" cy="32" r="3" style="fill:#17191e" stroke="none"/><circle cx="207" cy="32" r="3" style="fill:#17191e" stroke="none"/>
+        <path d="M195 40q5 4 10 0" fill="none"/>
+        <rect x="184" y="52" width="32" height="40" rx="7" style="fill:var(--mint)"/>
+        <path d="M186 62q-14 4-24 16" fill="none"/>
+        <path d="M192 92l-3 46M208 92l4 46M183 138h10M207 138h10" fill="none"/>
+      </svg>
+      <figcaption>{{ open_call.meme }}</figcaption>
+    </figure>
+    {% endif %}
   </section>{% endif %}
 
   {% if failures %}{% set f = failures[0] %}<section class="fail" aria-labelledby="fail-h">
