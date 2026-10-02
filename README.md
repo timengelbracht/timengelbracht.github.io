@@ -22,13 +22,15 @@ make test               # offline tests
 
 | File | What it controls |
 |---|---|
-| `config.yml` | `cursor_robot: true/false` (the robot following the mouse, off by default), name, bio (`[[keyword]]` gets a hand-drawn underline), "now" line, links, collaborators, where papers come from |
+| `config.yml` | email, office, `url` + `tagline` (link previews), `cursor_robot: true/false` (the robot following the mouse, off by default), name, bio (`[[keyword]]` gets a hand-drawn underline), "now" line, links, collaborators, where papers come from |
+| `content/themes.yml` | research themes ("what I work on") and the "work with me" open call, incl. optional student projects |
 | `content/news.yml` | news list |
 | `content/robot_today.yml` | "today the robot is …" lines. Every number must come from a paper; `source` says where |
 | `content/failures.yml` | failure of the month (newest first). Add one with `.venv/bin/sitegen add-failure clip.mov --title "…" --caption "…"` (no date is shown, so it never goes stale) |
 | `content/paper_links.yml` | per-paper extras: venue ("CVPR 2026", shown as a sticker), a missing project page, hiding a paper. Applied at build time, no sync needed |
 | `assets/headshot.jpg` | your photo; a placeholder shows until it exists |
-| `assets/cv.pdf` | your CV (linked from the header) |
+| `assets/cv.pdf` | your CV (the CV link appears once the file exists) |
+| `assets/social.png` | the picture shown when the site is shared (1200×630) |
 | `overrides/<slug>/teaser.mp4` or `.png` | optional: replace an automatically found teaser |
 
 After editing, `make build serve` shows the result. Pushing to `main` redeploys.

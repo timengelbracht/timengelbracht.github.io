@@ -3,11 +3,23 @@
 
 name: Tim Engelbracht
 greeting: "Hi, I'm Tim."
+# [[keyword]] gets a hand-drawn underline; [text](url) becomes a link.
 bio: >-
-  I'm a PhD student in the Computer Vision and Geometry Group at ETH Zürich.
+  I'm a Doctoral Fellow at the [ETH AI Center](https://ai.ethz.ch) and ETH Zürich,
+  supervised by Prof. Marc Pollefeys and Prof. Stefan Leutenegger.
   I work on robots that understand scenes by interacting with them:
   [[mobile manipulation]], [[force-grounded perception]] and [[scene understanding]].
 now: bringing scene representations and contact forces into the context of robot policies.
+
+# Short line used for link previews (Slack, LinkedIn, X) and search engines.
+tagline: Doctoral Fellow at the ETH AI Center and ETH Zürich, working on robots that understand scenes by interacting with them.
+# Where the site lives. Link previews need the full address. Change it if your repo has another name.
+url: https://timengelbracht.github.io
+social_image: assets/social.png
+
+# Contact. The address is shown in a form that address-harvesting bots can't read easily.
+email: tengelbracht@ethz.ch
+office: ""   # e.g. "CAB G 85.1, Universitätstrasse 6, 8092 Zürich" (left out while empty)
 
 # The little robot that follows the mouse. Off to keep the page calm.
 cursor_robot: false
@@ -15,6 +27,7 @@ cursor_robot: false
 # Put your photo at assets/headshot.jpg (square works best). Until then a placeholder shows.
 headshot: assets/headshot.jpg
 
+# Links whose address still contains YOUR_ or points to a file that doesn't exist yet are hidden.
 links:
   - { label: Scholar, url: "https://scholar.google.com/citations?user=YOUR_SCHOLAR_ID" }
   - { label: GitHub, url: "https://github.com/timengelbracht" }

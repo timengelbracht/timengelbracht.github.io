@@ -1,0 +1,42 @@
+# Research themes, shown above the paper list.
+# papers: slugs of papers that belong here (see assets/teasers/ or data/publications.json).
+# match:  a pattern; new papers whose title or abstract match it join the theme automatically.
+# color:  sky, rose or mint (the hand-drawn underline).
+themes:
+  - title: Robots that learn a scene by touching it
+    color: sky
+    text: >-
+      Most robots map a room by looking at it. I'm interested in what they learn by
+      interacting with it: pressing a light switch to find out which lamp it controls,
+      or opening drawers and cabinets to recover how they move and what is inside.
+    papers: [spotlight, articulated-3d-scene-graphs-for-open-wor]
+    match: scene graph|light switch|affordance
+
+  - title: Forces as a first-class signal
+    color: rose
+    text: >-
+      Two doors can look the same and still need very different effort. I record and
+      model the forces of real interactions, from a dataset of people opening things
+      with force and touch sensing to digital twins that capture friction, springs and
+      door closers, and use them to control robots.
+    papers: [hoi, forcetwin]
+    match: force|tactile|haptic|contact
+
+  - title: Perception across people, robots and devices
+    color: mint
+    text: >-
+      Robots share spaces with people and their devices. I have worked on localizing
+      legged robots, phones and headsets in the same map, on a mixed-reality interface
+      for directing several robots at once, and on learning where a robot should look
+      from human egocentric video.
+    papers: [crocodl, spot-on, lime]
+    match: locali[sz]|mixed reality|egocentric|camera
+
+# Shown under the themes. Leave `projects` empty to show only the open call.
+open_call:
+  title: Work with me
+  text: >-
+    I supervise Bachelor's, Master's and semester projects at ETH Zürich on these topics,
+    and I'm always happy to talk to researchers working on related problems.
+    If you'd like to work together, write me a few lines about what you have in mind.
+  projects: []   # e.g. - { title: "Force-aware door opening on Spot", type: "MSc / semester project" }

@@ -32,3 +32,24 @@ def test_venues_from_paper_links_show_without_sync(repo):
     html = build.run(repo).read_text()
     assert '<span class="venue">CVPR 2026</span>' in html
     assert '<span class="venue">Humanoids 2025</span>' in html
+
+
+def test_contact_themes_and_link_previews(repo):
+    html = build.run(repo).read_text()
+    assert "tengelbracht [at] ethz.ch" in html and "tengelbracht@ethz.ch" not in html  # no plain address
+    assert "what I work on" in html and "Work with me" in html
+    assert 'href="#p-hoi"' in html and 'id="p-hoi"' in html                         # theme -> paper links
+    assert 'property="og:image" content="https://timengelbracht.github.io/assets/social.png"' in html
+    assert "YOUR_SCHOLAR_ID" not in html                                              # placeholder link hidden
+    assert "shout-out to my collaborators" in html
+
+
+def test_bio_links_and_keywords():
+    out = build.bio_html("at the [ETH AI Center](https://ai.ethz.ch) on [[scene understanding]]")
+    assert '<a href="https://ai.ethz.ch"' in out and 'class="kw k1"' in out
+
+
+def test_new_papers_join_themes_by_keyword():
+    themes = [{"title": "Forces", "papers": [], "match": "force"}]
+    papers = [{"slug": "xyz", "title": "Xyz: something", "abstract": "we measure contact force"}]
+    assert build.themes_with_papers(themes, papers)[0]["paper_refs"] == [{"slug": "xyz", "short": "Xyz"}]
