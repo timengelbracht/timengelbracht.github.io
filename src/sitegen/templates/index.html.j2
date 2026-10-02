@@ -80,6 +80,13 @@ h2{font-family:var(--f-hand);font-weight:500;font-size:15px;color:var(--muted);m
 .crew a{position:relative;text-decoration:none;border-bottom:1px dashed var(--muted)}
 .crew a svg{position:absolute;left:50%;bottom:calc(100% + 4px);width:34px;margin-left:-17px;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .3s cubic-bezier(.3,1.5,.5,1);pointer-events:none}
 .crew a:hover svg,.crew a:focus-visible svg{opacity:1;transform:none}
+.crew-more{margin-top:10px}
+.crew-more summary{cursor:pointer;display:inline-block;font:500 14px var(--f-hand);color:var(--muted);list-style:none}
+.crew-more summary::-webkit-details-marker{display:none}
+.crew-more summary:hover{color:var(--accent)}
+.crew-more[open] summary{margin-bottom:8px}
+.crew-more .crew{font-size:14.5px;gap:4px 14px}
+.crew-more .crew a{color:var(--muted)}
 .crew-note{margin:10px 0 0;font-size:14px;color:var(--muted)}
 
 
@@ -308,6 +315,13 @@ body>svg:first-of-type{position:absolute}
       {% for c in crew %}<li><a href="{{ c.url or '#crew-h' }}" {% if c.url %}target="_blank" rel="noopener"{% endif %} data-n="{{ c.name }}">{{ c.name }}</a></li>
       {% endfor %}
     </ul>
+    {% if crew_more %}<details class="crew-more">
+      <summary>+ {{ crew_more|length }} more</summary>
+      <ul class="crew">
+        {% for c in crew_more %}<li><a href="{{ c.url or '#crew-h' }}" {% if c.url %}target="_blank" rel="noopener"{% endif %} data-n="{{ c.name }}">{{ c.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </details>{% endif %}
     <p class="crew-note">Cool people, fun to work with ;)</p>
   </section>{% endif %}
 
@@ -470,7 +484,7 @@ body>svg:first-of-type{position:absolute}
 
   /* collaborator robots: generated from the name, so everyone gets their own */
   const fills=['var(--sky)','var(--rose)','var(--mint)','var(--butter)'];
-  document.querySelectorAll('#crew a').forEach(a=>{
+  document.querySelectorAll('.crew a').forEach(a=>{
     let h=0;for(const c of a.dataset.n)h=(h*31+c.charCodeAt(0))>>>0;
     const f=fills[h%4], tall=h%3, eyes=(h>>3)%3, ant=(h>>5)%2;
     const headH=[18,22,26][tall], y=36-headH;

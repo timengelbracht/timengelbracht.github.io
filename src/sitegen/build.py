@@ -11,7 +11,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from sitegen import venues
 from sitegen.paths import Paths
-from sitegen.util import load_yaml, log, norm, slugify
+from sitegen.util import collaborators_config, load_yaml, log, norm, person_key, slugify
 
 TEMPLATES = Path(__file__).parent / "templates"
 
@@ -135,6 +135,29 @@ def prepare(p: dict, me: set) -> dict:
     return p
 
 
+def collaborators(cfg: dict, papers: list) -> tuple:
+    """Key people up front; everyone else (all co-authors by default) behind '+N more'."""
+    key, others, hide = collaborators_config(cfg)
+    skip = {person_key(n) for n in cfg.get("my_author_names", [])} | {person_key(n) for n in hide}
+    shown = [dict(c) for c in key if person_key(c["name"]) not in skip]
+    taken = skip | {person_key(c["name"]) for c in shown}
+    if others == "all":
+        counts: dict = {}
+        names: dict = {}
+        for p in papers:
+            for a in p.get("authors") or []:
+                k = person_key(a)
+                if not k or k in taken:
+                    continue
+                counts[k] = counts.get(k, 0) + 1
+                if len(a) > len(names.get(k, "")):  # prefer 'Alessandro Mercurio' over 'A. Mercurio'
+                    names[k] = a
+        more = [{"name": names[k]} for k in sorted(counts, key=lambda k: (-counts[k], names[k].split()[-1]))]
+    else:
+        more = [dict(c) for c in others or [] if person_key(c["name"]) not in taken]
+    return shown, more
+
+
 def run(paths: Paths) -> Path:
     cfg = load_yaml(paths.config, {})
     pubs = {"papers": [], "synced": "never"}
@@ -153,9 +176,7 @@ def run(paths: Paths) -> Path:
             rest = rest[:68].rsplit(" ", 1)[0] + "…"
         newest = {"short": short, "rest": rest, "link": papers[0]["link"]}
 
-    # collaborators: only people you listed, and only once they actually co-authored something
-    coauthors = {norm(a) for p in papers for a in (p.get("authors") or [])}
-    crew = [c for c in cfg.get("collaborators", []) if norm(c["name"]) in coauthors]
+    crew, crew_more = collaborators(cfg, papers)
 
     today = load_yaml(paths.content / "robot_today.yml", [])
     themes_file = load_yaml(paths.content / "themes.yml", [])
@@ -167,7 +188,8 @@ def run(paths: Paths) -> Path:
     site_url = (cfg.get("url") or "").rstrip("/")
     env = Environment(loader=FileSystemLoader(str(TEMPLATES)), autoescape=select_autoescape(["html", "j2"]))
     page = env.get_template("index.html.j2").render(
-        cfg=cfg, bio_html=bio_html(cfg.get("bio", "")), papers=papers, newest=newest, crew=crew,
+        cfg=cfg, bio_html=bio_html(cfg.get("bio", "")), papers=papers, newest=newest,
+        crew=crew, crew_more=crew_more,
         today=today, today_js=json.dumps(today, ensure_ascii=False),
         themes=themes_with_papers(themes, papers), open_call=open_call, email=email_parts(cfg.get("email", "")),
         site_url=site_url,
@@ -181,5 +203,6 @@ def run(paths: Paths) -> Path:
     if paths.assets.exists():
         shutil.copytree(paths.assets, paths.site / "assets", dirs_exist_ok=True)
     (paths.site / ".nojekyll").write_text("")  # GitHub Pages: serve files as they are
-    log(f"built {paths.rel(paths.site / 'index.html')}: {len(papers)} papers, {len(crew)} collaborators")
+    log(f"built {paths.rel(paths.site / 'index.html')}: {len(papers)} papers, "
+        f"{len(crew)}+{len(crew_more)} collaborators")
     return paths.site / "index.html"

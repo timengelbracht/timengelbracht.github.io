@@ -19,7 +19,7 @@ from sitegen import venues
 from sitegen.paths import Paths
 from sitegen.sources import arxiv, dblp, openalex, scholar, semantic_scholar
 from sitegen.teasers import Teasers, doodle
-from sitegen.util import is_abbreviated, load_yaml, log, norm, slugify
+from sitegen.util import collaborators_config, is_abbreviated, load_yaml, log, norm, person_key, slugify
 
 KEEP_FROM_LAST_SYNC = ("authors", "abstract", "date", "venue", "arxiv", "arxiv_url", "doi", "pdf_url")
 MANUAL_LINK_KINDS = ("project", "code", "video", "data", "paper")
@@ -192,11 +192,16 @@ def run(paths: Paths) -> list[dict]:
             out.append(prev)
     out.sort(key=lambda p: str(p.get("date") or f"{p.get('year') or 0}-00-00"), reverse=True)
 
-    listed = {norm(c["name"]) for c in cfg.get("collaborators", [])} | {norm(n) for n in cfg.get("my_author_names", [])}
+    key, others, hide = collaborators_config(cfg)
+    listed = {person_key(c["name"]) for c in key} | {person_key(n) for n in cfg.get("my_author_names", []) + hide}
+    if others == "all":  # everyone else is shown under "+N more" anyway
+        listed |= {person_key(a) for p in out for a in p.get("authors") or []}
+    else:
+        listed |= {person_key(c["name"]) for c in others or []}
     unlisted: dict[str, int] = {}
     for p in out:
         for a in p.get("authors") or []:
-            if norm(a) not in listed:
+            if person_key(a) not in listed:
                 unlisted[a] = unlisted.get(a, 0) + 1
     if unlisted:
         log("co-authors not in config.yml collaborators:",

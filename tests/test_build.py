@@ -56,3 +56,19 @@ def test_new_papers_join_themes_by_keyword():
     themes = [{"title": "Forces", "papers": [], "match": "force"}]
     papers = [{"slug": "xyz", "title": "Xyz: something", "abstract": "we measure contact force"}]
     assert build.themes_with_papers(themes, papers)[0]["paper_refs"] == [{"slug": "xyz", "short": "Xyz"}]
+
+
+def test_key_collaborators_up_front_everyone_else_tucked_away():
+    cfg = {"my_author_names": ["Tim Engelbracht"],
+           "collaborators": {"key": [{"name": "Zuria Bauer"}, {"name": "Marc Pollefeys"}], "others": "all",
+                             "hide": ["Hidden Person"]}}
+    papers = [{"authors": ["Tim Engelbracht", "Z. Bauer", "A. Mercurio", "Marc Pollefeys", "Hidden Person"]},
+              {"authors": ["Alessandro Mercurio", "Zuria Bauer", "Mihai Dusmanu"]}]
+    key, more = build.collaborators(cfg, papers)
+    assert [c["name"] for c in key] == ["Zuria Bauer", "Marc Pollefeys"]
+    assert [c["name"] for c in more] == ["Alessandro Mercurio", "Mihai Dusmanu"]  # merged, no dupes, no me
+
+
+def test_old_collaborator_list_still_works():
+    key, more = build.collaborators({"collaborators": [{"name": "René Zurbrügg"}]}, [])
+    assert [c["name"] for c in key] == ["René Zurbrügg"] and more == []

@@ -13,6 +13,8 @@ spot-on:
   venue: CVPR Workshop 2025
 crocodl:
   venue: CVPR 2025
+  authors: [Hermann Blum, Alessandro Mercurio, Joshua O'Reilly, Tim Engelbracht, Mihai Dusmanu, Marc Pollefeys,
+            Zuria Bauer]
 hoi:
   venue: CVPR 2026
 articulated-3d-scene-graphs-for-open-wor:

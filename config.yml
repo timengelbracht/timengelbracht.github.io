@@ -60,13 +60,15 @@ project_page_guesses: ["https://timengelbracht.github.io/{short}/"]
 my_author_names: ["Tim Engelbracht", "T. Engelbracht"]
 
 # ---- collaborators ------------------------------------------------------------
-# Only people listed here appear on the site. The sync prints co-authors that are
-# not listed yet, so you can decide. `url` is optional and should be their own page.
+# key:    shown up front, in this order. `url` is optional and should be their own page.
+# others: "all" = every other co-author of your papers, tucked behind "+N more"
+#         (updates itself with new papers), or a list like `key`, or [] for nobody.
+# hide:   names never shown.
 collaborators:
-  - { name: René Zurbrügg }
-  - { name: Hermann Blum }
-  - { name: Zuria Bauer }
-  - { name: Matteo Wohlrapp }
-  - { name: Martin Büchner }
-  - { name: Abhinav Valada }
-  - { name: Marc Pollefeys }
+  key:
+    - { name: Zuria Bauer }
+    - { name: René Zurbrügg }
+    - { name: Hermann Blum }
+    - { name: Marc Pollefeys }
+  others: all
+  hide: []

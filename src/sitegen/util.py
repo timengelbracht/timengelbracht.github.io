@@ -37,6 +37,22 @@ def load_yaml(path: Path, default):
     return yaml.safe_load(path.read_text(encoding="utf-8")) or default
 
 
+def person_key(name: str) -> str:
+    """'Zuria Bauer' and 'Z. Bauer' -> 'zbauer', so abbreviated names match full ones."""
+    parts = [p for p in re.split(r"[\s.]+", ascii_lower(name or "")) if p]
+    if not parts:
+        return ""
+    return re.sub(r"[^a-z]", "", parts[0][:1] + parts[-1])
+
+
+def collaborators_config(cfg: dict) -> tuple:
+    """(key, others, hide) from config.yml; also accepts the older plain list of people."""
+    c = cfg.get("collaborators") or {}
+    if isinstance(c, list):  # old format: everyone listed is "key"
+        return c, [], []
+    return c.get("key") or [], c.get("others", "all"), c.get("hide") or []
+
+
 def is_abbreviated(name: str) -> bool:
     """'Z. Bauer' or 'A Mercurio' style author names."""
     return bool(re.match(r"^([A-Z]\.?\s?)+\s?[A-Z][^.]+$", name.strip())) and len(name.split()[0].rstrip(".")) == 1
