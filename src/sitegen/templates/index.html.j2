@@ -129,7 +129,6 @@ h2{font-family:var(--f-hand);font-weight:500;font-size:15px;color:var(--muted);m
 .call .mail{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:4px 0 0}
 .call .email{font:500 16px var(--f-mono)}
 .call .copy-mail{cursor:pointer;background:var(--bg);color:var(--muted);margin:0}
-.call .office{font-size:14px;color:var(--muted);margin:6px 0 0}
 /* failure of the month: a big sticky note */
 .fail{position:relative;align-self:flex-start;width:min(100%,520px);margin:18px 0 0 4px;padding:22px 20px 18px;background:var(--butter);color:#17191e;transform:rotate(-1.4deg);box-shadow:0 12px 26px -14px rgba(0,0,0,.45);transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
 .fail:hover{transform:rotate(0)}
@@ -349,7 +348,6 @@ body>svg:first-of-type{position:absolute}
       <a class="email" data-u="{{ email.user }}" data-d="{{ email.domain }}" href="#contact">{{ email.user }} [at] {{ email.domain }}</a>
       <button class="tag copy-mail" type="button">copy</button>
     </p>{% endif %}
-    {% if cfg.office %}<p class="office">{{ cfg.office }}</p>{% endif %}
     </div>
     {% if open_call and open_call.meme %}
     <figure class="us" aria-label="A person and a robot carrying a box together">

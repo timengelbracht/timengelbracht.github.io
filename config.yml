@@ -1,5 +1,5 @@
 # Everything you might ever want to change by hand lives in this file (and in content/).
-# Papers are NOT listed here: `python -m sitegen sync` pulls them automatically every week.
+# Papers are NOT listed here: `uv run sitegen sync` pulls them automatically every week.
 
 name: Tim Engelbracht
 greeting: "Hi, I'm Tim."
@@ -21,7 +21,6 @@ social_image: assets/social.png
 
 # Contact. The address is shown in a form that address-harvesting bots can't read easily.
 email: tengelbracht@ethz.ch
-office: ""   # e.g. "CAB G 85.1, Universitätstrasse 6, 8092 Zürich" (left out while empty)
 
 # The little robot that follows the mouse. Off to keep the page calm.
 cursor_robot: false
@@ -34,7 +33,7 @@ headshot: assets/headshot.jpg
 
 # Links whose address still contains YOUR_ or points to a file that doesn't exist yet are hidden.
 links:
-  - { label: Scholar, url: "https://scholar.google.com/citations?user=YOUR_SCHOLAR_ID" }
+  - { label: Scholar, url: "https://scholar.google.com/citations?user=Ig5T__8AAAAJ" }
   - { label: GitHub, url: "https://github.com/timengelbracht" }
   - { label: LinkedIn, url: "https://www.linkedin.com/in/timengelbracht/" }
   - { label: CV, url: "assets/cv.pdf" }
@@ -43,7 +42,7 @@ links:
 sources:
   # Your Google Scholar user id (the part after "user=" in your profile URL).
   # Leave empty to skip Scholar; Semantic Scholar is then the only list.
-  google_scholar_id: ""
+  google_scholar_id: "Ig5T__8AAAAJ"
   # Semantic Scholar sometimes splits one person into several profiles.
   # List every profile id that is you. Find them at semanticscholar.org.
   semantic_scholar_ids: ["2363878466"]
@@ -66,9 +65,9 @@ my_author_names: ["Tim Engelbracht", "T. Engelbracht"]
 # hide:   names never shown.
 collaborators:
   key:
-    - { name: Zuria Bauer }
-    - { name: René Zurbrügg }
-    - { name: Hermann Blum }
-    - { name: Marc Pollefeys }
+    - { name: Zuria Bauer, url: "https://zuriabauer.com" }
+    - { name: René Zurbrügg, url: "https://renezurbruegg.github.io" }
+    - { name: Hermann Blum, url: "https://hermannblum.net" }
+    - { name: Marc Pollefeys, url: "https://people.inf.ethz.ch/marc.pollefeys/" }
   others: all
   hide: []
