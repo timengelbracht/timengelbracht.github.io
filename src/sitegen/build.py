@@ -1,17 +1,22 @@
 """Render site/ from config.yml, content/*.yml and data/publications.json."""
+
 from __future__ import annotations
 
 import html
 import json
+import logging
 import re
 import shutil
 from pathlib import Path
+from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from sitegen import venues
 from sitegen.paths import Paths
-from sitegen.util import collaborators_config, load_yaml, log, norm, person_key, slugify
+from sitegen.util import collaborators_config, load_yaml, norm, person_key, slugify
+
+logger = logging.getLogger(__name__)
 
 TEMPLATES = Path(__file__).parent / "templates"
 
@@ -21,20 +26,28 @@ SCRIBBLES = [  # hand-drawn underline paths for [[keywords]] in the bio
     ("k3", "M1 4c20 4 36-3 52 1s30 2 46-1"),
 ]
 
-CHIPS = (("project", "project page"), ("arxiv", "arXiv"), ("paper", "paper"),
-         ("code", "code"), ("video", "video"), ("data", "data"))
+CHIPS = (
+    ("project", "project page"),
+    ("arxiv", "arXiv"),
+    ("paper", "paper"),
+    ("code", "code"),
+    ("video", "video"),
+    ("data", "data"),
+)
 
 
 def bio_html(text: str) -> str:
     """[[keyword]] -> keyword with a hand-drawn underline; [text](url) -> link."""
     out, i, n = [], 0, 0
     for m in re.finditer(r"\[\[(.+?)\]\]|\[([^\]]+)\]\((https?://[^)\s]+)\)", text):
-        out.append(html.escape(text[i:m.start()]))
+        out.append(html.escape(text[i : m.start()]))
         if m.group(1):
             cls, d = SCRIBBLES[n % len(SCRIBBLES)]
             n += 1
-            out.append(f'<span class="kw {cls}">{html.escape(m.group(1))}<svg viewBox="0 0 100 10" '
-                       f'preserveAspectRatio="none"><path d="{d}"/></svg></span>')
+            out.append(
+                f'<span class="kw {cls}">{html.escape(m.group(1))}<svg viewBox="0 0 100 10" '
+                f'preserveAspectRatio="none"><path d="{d}"/></svg></span>'
+            )
         else:
             url, label = html.escape(m.group(3)), html.escape(m.group(2))
             out.append(f'<a href="{url}" target="_blank" rel="noopener">{label}</a>')
@@ -65,12 +78,19 @@ def themes_with_papers(themes: list, papers: list) -> list:
         pattern = t.get("match")
         for p in papers:
             text = p["title"] + " " + (p.get("abstract") or "")
-            if p["slug"] not in listed and pattern and re.search(pattern, text, re.I) and not any(
-                    p["slug"] in (o.get("papers") or []) for o in themes):
+            if (
+                p["slug"] not in listed
+                and pattern
+                and re.search(pattern, text, re.I)
+                and not any(p["slug"] in (o.get("papers") or []) for o in themes)
+            ):
                 listed.append(p["slug"])
         by_slug = {p["slug"]: p for p in papers}
-        t["paper_refs"] = [{"slug": s, "short": by_slug[s].get("short") or split_title(by_slug[s]["title"])[0]}
-                           for s in listed if s in by_slug]
+        t["paper_refs"] = [
+            {"slug": s, "short": by_slug[s].get("short") or split_title(by_slug[s]["title"])[0]}
+            for s in listed
+            if s in by_slug
+        ]
         out.append(t)
     return out
 
@@ -85,8 +105,11 @@ def email_parts(email: str) -> dict:
 
 def authors_html(p: dict, me: set) -> str:
     """Comma-separated authors with yours underlined. Empty if unknown: never a placeholder."""
-    authors = p.get("authors") or [a.strip() for a in (p.get("authors_short") or "").split(",")
-                                   if a.strip() and "..." not in a and "…" not in a]
+    authors = p.get("authors") or [
+        a.strip()
+        for a in (p.get("authors_short") or "").split(",")
+        if a.strip() and "..." not in a and "…" not in a
+    ]
     if not authors:
         return ""
     if len(authors) > 9:  # long consortium lists stay readable
@@ -115,7 +138,7 @@ def apply_overrides(p: dict, manual: dict) -> dict:
     return p
 
 
-def split_title(t: str):
+def split_title(t: str) -> tuple[str, str]:
     """'Hoi! - A Multimodal Dataset' -> ('Hoi!', 'A Multimodal Dataset')."""
     m = re.match(r"^(.{2,40}?)\s*(?::|\s[-–—]\s)\s*(.+)$", t)
     return (m.group(1).strip(), m.group(2).strip()) if m else (t, "")
@@ -124,8 +147,14 @@ def split_title(t: str):
 def prepare(p: dict, me: set) -> dict:
     p = dict(p)
     links = p.get("links") or {}
-    p["link"] = links.get("project") or links.get("arxiv") or links.get("paper") or p.get("s2_url") \
-        or p.get("scholar_url") or "#"
+    p["link"] = (
+        links.get("project")
+        or links.get("arxiv")
+        or links.get("paper")
+        or p.get("s2_url")
+        or p.get("scholar_url")
+        or "#"
+    )
     p["authors_html"] = authors_html(p, me)
     p["venue"] = venue_label(p)
     p["published"] = venues.is_published(p["venue"])
@@ -160,7 +189,7 @@ def collaborators(cfg: dict, papers: list) -> tuple:
 
 def run(paths: Paths) -> Path:
     cfg = load_yaml(paths.config, {})
-    pubs = {"papers": [], "synced": "never"}
+    pubs: dict[str, Any] = {"papers": [], "synced": "never"}
     if paths.data.exists():
         pubs = json.loads(paths.data.read_text(encoding="utf-8"))
     me = {norm(n) for n in cfg.get("my_author_names", [])}
@@ -188,21 +217,31 @@ def run(paths: Paths) -> Path:
     site_url = (cfg.get("url") or "").rstrip("/")
     env = Environment(loader=FileSystemLoader(str(TEMPLATES)), autoescape=select_autoescape(["html", "j2"]))
     page = env.get_template("index.html.j2").render(
-        cfg=cfg, bio_html=bio_html(cfg.get("bio", "")), papers=papers, newest=newest,
-        crew=crew, crew_more=crew_more,
-        today=today, today_js=json.dumps(today, ensure_ascii=False),
-        themes=themes_with_papers(themes, papers), open_call=open_call, email=email_parts(cfg.get("email", "")),
+        cfg=cfg,
+        bio_html=bio_html(cfg.get("bio", "")),
+        papers=papers,
+        newest=newest,
+        crew=crew,
+        crew_more=crew_more,
+        today=today,
+        today_js=json.dumps(today, ensure_ascii=False),
+        themes=themes_with_papers(themes, papers),
+        open_call=open_call,
+        email=email_parts(cfg.get("email", "")),
         site_url=site_url,
         social_image=f"{site_url}/{cfg['social_image']}" if site_url and cfg.get("social_image") else "",
         news=load_yaml(paths.content / "news.yml", []),
         failures=load_yaml(paths.content / "failures.yml", []),
-        synced=pubs.get("synced", "never"))
+        synced=pubs.get("synced", "never"),
+    )
 
     paths.site.mkdir(exist_ok=True)
     (paths.site / "index.html").write_text(page, encoding="utf-8")
     if paths.assets.exists():
         shutil.copytree(paths.assets, paths.site / "assets", dirs_exist_ok=True)
     (paths.site / ".nojekyll").write_text("")  # GitHub Pages: serve files as they are
-    log(f"built {paths.rel(paths.site / 'index.html')}: {len(papers)} papers, "
-        f"{len(crew)}+{len(crew_more)} collaborators")
+    logger.info(
+        f"built {paths.rel(paths.site / 'index.html')}: {len(papers)} papers, "
+        f"{len(crew)}+{len(crew_more)} collaborators"
+    )
     return paths.site / "index.html"

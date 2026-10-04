@@ -1,10 +1,14 @@
 """Semantic Scholar Graph API (free, no key needed for low volumes)."""
+
 from __future__ import annotations
 
+import logging
 import time
 
 from sitegen.http import as_json, get
-from sitegen.util import log
+
+logger = logging.getLogger(__name__)
+
 
 API = "https://api.semanticscholar.org/graph/v1"
 FIELDS = "title,year,publicationDate,venue,authors,externalIds,abstract,url,openAccessPdf"
@@ -33,7 +37,7 @@ def author_papers(author_ids: list[str]) -> list[dict]:
         r = get(f"{API}/author/{aid}/papers", params={"fields": FIELDS, "limit": 200})
         out += [to_paper(p) for p in as_json(r).get("data", [])]
         time.sleep(1)
-    log(f"Semantic Scholar: {len(out)} papers")
+    logger.info(f"Semantic Scholar: {len(out)} papers")
     return out
 
 

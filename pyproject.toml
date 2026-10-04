@@ -1,44 +1,92 @@
-[build-system]
-requires = ["setuptools>=61"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "sitegen"
 version = "0.1.0"
 description = "Tim Engelbracht's personal website: a static site whose paper list updates itself."
 readme = "README.md"
-requires-python = ">=3.8"
 authors = [{ name = "Tim Engelbracht" }]
+requires-python = ">=3.12"
 dependencies = [
-    "requests>=2.31",
     "beautifulsoup4>=4.12",
-    "pyyaml>=6.0",
+    "imageio-ffmpeg>=0.5",  # bundled ffmpeg for teaser and failure videos
     "jinja2>=3.1",
     "pillow>=10.0",
-    "imageio-ffmpeg>=0.4.9",  # bundled ffmpeg for teaser and failure videos
-    "pymupdf>=1.23",          # figures from paper PDFs
+    "pymupdf>=1.24",        # figures from paper PDFs
+    "pyyaml>=6.0",
+    "requests>=2.31",
 ]
-
-[project.optional-dependencies]
-dev = ["pytest>=7", "ruff>=0.4"]
 
 [project.scripts]
 sitegen = "sitegen.cli:main"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "mypy",
+    "pylint",
+    "import-linter",
+    "pre-commit",
+    "types-PyYAML",
+    "types-requests",
+]
 
-[tool.setuptools.package-data]
-sitegen = ["templates/*.j2"]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sitegen"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "C90", "PLR0912", "PLR0915"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["PLR2004"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 15
+
+[tool.ruff.lint.pylint]
+max-branches = 15
+max-statements = 60
+
+[tool.structure]  # tools/check_structure.py
+max_file_lines = 400
+max_function_lines = 60
+paths = ["src", "tests", "tools"]
+
+[tool.pylint.similarities]  # duplicate-code check
+min-similarity-lines = 10
+ignore-comments = true
+ignore-docstrings = true
+ignore-imports = true
+
+[tool.importlinter]  # module boundaries: higher layers may import lower, never the reverse
+root_package = "sitegen"
+
+[[tool.importlinter.contracts]]
+name = "Layered architecture (see docs/ARCHITECTURE.md)"
+type = "layers"
+layers = [
+    "sitegen.cli",
+    "sitegen.sync | sitegen.build | sitegen.failures",
+    "sitegen.teasers",
+    "sitegen.links",
+    "sitegen.sources",
+    "sitegen.http | sitegen.media | sitegen.venues",
+    "sitegen.util | sitegen.paths",
+]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+check_untyped_defs = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-
-[tool.ruff]
-line-length = 120
-target-version = "py38"
-src = ["src", "tests"]
-
-[tool.ruff.lint]
-select = ["E", "F", "W", "I", "B", "UP"]
-ignore = ["E731", "UP006", "UP007", "UP035"]  # keep 3.8-friendly annotations

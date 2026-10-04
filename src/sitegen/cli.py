@@ -1,16 +1,19 @@
 """Command line:  python -m sitegen <command>
 
-  sync          pull papers, abstracts, links and teasers into data/ and assets/
-  build         render site/ from config.yml, content/ and data/
-  serve         serve site/ on http://localhost:8000
-  preview       sync + build + serve, and open the browser
-  add-failure   add a failure-of-the-month clip
+sync          pull papers, abstracts, links and teasers into data/ and assets/
+build         render site/ from config.yml, content/ and data/
+serve         serve site/ on http://localhost:8000
+preview       sync + build + serve, and open the browser
+add-failure   add a failure-of-the-month clip
 """
+
 from __future__ import annotations
 
 import argparse
+import contextlib
 import functools
 import http.server
+import logging
 import threading
 import webbrowser
 from pathlib import Path
@@ -18,23 +21,24 @@ from pathlib import Path
 from sitegen import build, failures, sync
 from sitegen.paths import Paths, find_root
 
+logger = logging.getLogger(__name__)
+
 
 def serve(paths: Paths, port: int, open_browser: bool) -> None:
     handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(paths.site))
     server = http.server.ThreadingHTTPServer(("127.0.0.1", port), handler)
     url = f"http://localhost:{port}"
-    print(f"Serving {url}  (Ctrl+C to stop)")
+    logger.info(f"serving {url}  (Ctrl+C to stop)")
     if open_browser:
         threading.Timer(0.8, webbrowser.open, args=(url,)).start()
-    try:
+    with contextlib.suppress(KeyboardInterrupt):
         server.serve_forever()
-    except KeyboardInterrupt:
-        pass
 
 
-def main(argv=None) -> None:
-    ap = argparse.ArgumentParser(prog="sitegen", description=__doc__,
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+def main(argv: list[str] | None = None) -> None:
+    ap = argparse.ArgumentParser(
+        prog="sitegen", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     ap.add_argument("--root", type=Path, help="repository root (default: found from the current folder)")
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("sync", help="pull papers into data/ and assets/teasers/")
@@ -48,6 +52,7 @@ def main(argv=None) -> None:
     fp.add_argument("--caption", default="")
     fp.add_argument("--title", default="")
     args = ap.parse_args(argv)
+    logging.basicConfig(level=logging.INFO, format="[sitegen] %(message)s")
     paths = Paths(find_root(args.root))
 
     if args.cmd == "sync":

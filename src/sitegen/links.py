@@ -1,4 +1,5 @@
 """Finding and checking a paper's links (project page, code, video, data, paper)."""
+
 from __future__ import annotations
 
 import re
@@ -12,8 +13,23 @@ from sitegen.util import ascii_lower, short_name
 
 URL_RE = re.compile(r"https?://[^\s,;)\]>\"']+")
 
-SKIP = ("arxiv.org", "doi.org", "creativecommons", "w3.org", "orcid.org", "openreview", "ieee.org", "acm.org",
-        "springer", "twitter.com", "x.com", "linkedin", "mailto:", "semanticscholar", "scholar.google")
+SKIP = (
+    "arxiv.org",
+    "doi.org",
+    "creativecommons",
+    "w3.org",
+    "orcid.org",
+    "openreview",
+    "ieee.org",
+    "acm.org",
+    "springer",
+    "twitter.com",
+    "x.com",
+    "linkedin",
+    "mailto:",
+    "semanticscholar",
+    "scholar.google",
+)
 VIDEO_HOSTS = ("youtube", "youtu.be", "vimeo", "photos.app.goo.gl", "photos.google")
 DATA_HOSTS = ("huggingface", "zenodo")
 
@@ -46,12 +62,16 @@ def from_arxiv_html(p: dict) -> list[str]:
     if not got:
         return []
     soup, _ = got
-    urls = [a["href"] for a in soup.select(
-        ".ltx_authors a[href], .ltx_abstract a[href], .ltx_note a[href], .ltx_title a[href]")]
+    urls = [
+        str(a["href"])
+        for a in soup.select(
+            ".ltx_authors a[href], .ltx_abstract a[href], .ltx_note a[href], .ltx_title a[href]"
+        )
+    ]
     for a in soup.select("a[href]"):
         ctx = (a.get_text(" ") + " " + (a.parent.get_text(" ") if a.parent else ""))[:200].lower()
         if re.search(r"project (page|website)|website|webpage|code (is )?available", ctx):
-            urls.append(a["href"])
+            urls.append(str(a["href"]))
     return [u for u in urls if u.startswith("http")]
 
 
@@ -59,14 +79,24 @@ def github_homepage(code_url: str) -> str | None:
     m = re.match(r"https://github\.com/([^/]+)/([^/#?]+)", code_url or "")
     if not m:
         return None
-    hp = as_json(get(f"https://api.github.com/repos/{m.group(1)}/{m.group(2)}", tries=1)).get("homepage") or ""
+    hp = (
+        as_json(get(f"https://api.github.com/repos/{m.group(1)}/{m.group(2)}", tries=1)).get("homepage") or ""
+    )
     return hp if hp.startswith("http") and "github.com" not in hp else None
 
 
 def guesses(p: dict, patterns: list[str]) -> list[str]:
     s = short_name(p["title"])
-    variants = dict.fromkeys([s, s.lower(), s.replace(" ", "-"), s.lower().replace(" ", "-"),
-                              f"{s}-Website", f"{s.lower()}-website"])
+    variants = dict.fromkeys(
+        [
+            s,
+            s.lower(),
+            s.replace(" ", "-"),
+            s.lower().replace(" ", "-"),
+            f"{s}-Website",
+            f"{s.lower()}-website",
+        ]
+    )
     return [pat.format(short=v) for pat in patterns for v in variants]
 
 

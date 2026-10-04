@@ -1,18 +1,24 @@
 """HTTP helpers. Every network call goes through get(), which never raises."""
+
 from __future__ import annotations
 
+import logging
 import time
+from typing import Any
 
 import requests
 
-from sitegen.util import log
+logger = logging.getLogger(__name__)
+
 
 USER_AGENT = "Mozilla/5.0 (personal-website paper sync; github.com/timengelbracht)"
 _session = requests.Session()
 _session.headers["User-Agent"] = USER_AGENT
 
 
-def get(url: str, *, params=None, timeout: float = 25, tries: int = 3, binary: bool = False):
+def get(
+    url: str, *, params: dict | None = None, timeout: float = 25, tries: int = 3, binary: bool = False
+) -> Any:
     """GET with retries. Returns the response (or its bytes), or None on any failure."""
     for i in range(tries):
         try:
@@ -24,7 +30,7 @@ def get(url: str, *, params=None, timeout: float = 25, tries: int = 3, binary: b
             return r.content if binary else r
         except requests.RequestException as e:
             if i == tries - 1:
-                log("  ! failed", url, "-", e)
+                logger.warning(f"failed {url} - {e}")
                 return None
             time.sleep(2 * (i + 1))
     return None
@@ -37,6 +43,6 @@ def as_json(r) -> dict:
     try:
         data = r.json()
     except ValueError:
-        log(f"  ! not JSON from {str(r.url)[:80]} (status {r.status_code}); skipping this source")
+        logger.warning(f"not JSON from {str(r.url)[:80]} (status {r.status_code}); skipping this source")
         return {}
     return data if isinstance(data, dict) else {}

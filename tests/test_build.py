@@ -5,21 +5,25 @@ def test_build_renders_every_paper(repo):
     index = build.run(repo)
     html = index.read_text()
     import json
+
     for p in json.loads(repo.data.read_text())["papers"]:
         assert p["title"].split(":")[0] in html
-    assert "co-authors" not in html          # never a placeholder author line
+    assert "co-authors" not in html  # never a placeholder author line
     assert "failure of the month" in html
     has_photo = (repo.root / "assets/headshot.jpg").exists()
     assert ("photo coming soon" in html) != has_photo  # placeholder only until the photo exists
-    assert 'id="buddy"' not in html          # cursor robot is off unless cursor_robot: true
-    assert 'id="lightSwitch"' not in html    # light switch is off unless light_switch: true
-    assert "<b>now:</b>" not in html         # "now" line is left out while empty
-    assert 'id="news-h"' not in html         # news section is left out while content/news.yml is empty
+    assert 'id="buddy"' not in html  # cursor robot is off unless cursor_robot: true
+    assert 'id="lightSwitch"' not in html  # light switch is off unless light_switch: true
+    assert "<b>now:</b>" not in html  # "now" line is left out while empty
+    assert 'id="news-h"' not in html  # news section is left out while content/news.yml is empty
 
 
 def test_unknown_authors_render_nothing():
     assert build.authors_html({"title": "X"}, set()) == ""
-    assert build.authors_html({"authors_short": "T Engelbracht, R Zurbrügg, ..."}, set()) == "T Engelbracht, R Zurbrügg"
+    assert (
+        build.authors_html({"authors_short": "T Engelbracht, R Zurbrügg, ..."}, set())
+        == "T Engelbracht, R Zurbrügg"
+    )
 
 
 def test_my_name_is_underlined():
@@ -42,9 +46,9 @@ def test_contact_themes_and_link_previews(repo):
     html = build.run(repo).read_text()
     assert "tengelbracht [at] ethz.ch" in html and "tengelbracht@ethz.ch" not in html  # no plain address
     assert "what I work on" in html and "let&#39;s connect!" in html and "this could be us" in html
-    assert 'href="#p-hoi"' in html and 'id="p-hoi"' in html                         # theme -> paper links
+    assert 'href="#p-hoi"' in html and 'id="p-hoi"' in html  # theme -> paper links
     assert 'property="og:image" content="https://timengelbracht.github.io/assets/social.png"' in html
-    assert "YOUR_SCHOLAR_ID" not in html                                              # placeholder link hidden
+    assert "YOUR_SCHOLAR_ID" not in html  # placeholder link hidden
     assert "shout-out to my collaborators" in html
 
 
@@ -60,11 +64,18 @@ def test_new_papers_join_themes_by_keyword():
 
 
 def test_key_collaborators_up_front_everyone_else_tucked_away():
-    cfg = {"my_author_names": ["Tim Engelbracht"],
-           "collaborators": {"key": [{"name": "Zuria Bauer"}, {"name": "Marc Pollefeys"}], "others": "all",
-                             "hide": ["Hidden Person"]}}
-    papers = [{"authors": ["Tim Engelbracht", "Z. Bauer", "A. Mercurio", "Marc Pollefeys", "Hidden Person"]},
-              {"authors": ["Alessandro Mercurio", "Zuria Bauer", "Mihai Dusmanu"]}]
+    cfg = {
+        "my_author_names": ["Tim Engelbracht"],
+        "collaborators": {
+            "key": [{"name": "Zuria Bauer"}, {"name": "Marc Pollefeys"}],
+            "others": "all",
+            "hide": ["Hidden Person"],
+        },
+    }
+    papers = [
+        {"authors": ["Tim Engelbracht", "Z. Bauer", "A. Mercurio", "Marc Pollefeys", "Hidden Person"]},
+        {"authors": ["Alessandro Mercurio", "Zuria Bauer", "Mihai Dusmanu"]},
+    ]
     key, more = build.collaborators(cfg, papers)
     assert [c["name"] for c in key] == ["Zuria Bauer", "Marc Pollefeys"]
     assert [c["name"] for c in more] == ["Alessandro Mercurio", "Mihai Dusmanu"]  # merged, no dupes, no me

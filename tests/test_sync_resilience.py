@@ -1,4 +1,5 @@
 """The sync must never make the site worse when sources are down or misbehave."""
+
 import json
 
 from sitegen import sync
@@ -26,12 +27,17 @@ def test_no_duplicates_when_slug_changes(repo, offline):
 
 
 def test_merge_by_title_first_value_wins():
-    merged = sync.merge([[{"title": "SpotLight: X", "year": 2024}],
-                         [{"title": "Spotlight: x", "abstract": "abc", "year": 1999}]])
+    merged = sync.merge(
+        [
+            [{"title": "SpotLight: X", "year": 2024}],
+            [{"title": "Spotlight: x", "abstract": "abc", "year": 1999}],
+        ]
+    )
     assert merged == [{"title": "SpotLight: X", "year": 2024, "abstract": "abc"}]
 
 
 def test_full_names_beat_abbreviations():
-    assert sync.better_authors(["Hermann Blum", "A. Mercurio", "Z. Bauer"],
-                               ["Hermann Blum", "Alessandro Mercurio", "Zuria Bauer"])
+    assert sync.better_authors(
+        ["Hermann Blum", "A. Mercurio", "Z. Bauer"], ["Hermann Blum", "Alessandro Mercurio", "Zuria Bauer"]
+    )
     assert not sync.better_authors(["Hermann Blum", "Zuria Bauer"], ["H. Blum", "Z. Bauer"])

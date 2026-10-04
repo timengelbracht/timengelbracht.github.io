@@ -1,4 +1,5 @@
 """Where everything lives inside the repository."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

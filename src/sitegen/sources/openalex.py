@@ -1,4 +1,5 @@
 """OpenAlex works API (free, no key)."""
+
 from __future__ import annotations
 
 from sitegen.http import as_json, get
@@ -6,8 +7,10 @@ from sitegen.util import norm
 
 
 def match(title: str) -> dict:
-    r = get("https://api.openalex.org/works",
-            params={"search": title, "per-page": 3, "mailto": "actions@github.com"})
+    r = get(
+        "https://api.openalex.org/works",
+        params={"search": title, "per-page": 3, "mailto": "actions@github.com"},
+    )
     for w in as_json(r).get("results", []):
         if norm(w.get("title") or "") != norm(title):
             continue

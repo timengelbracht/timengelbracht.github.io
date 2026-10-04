@@ -1,4 +1,5 @@
 """DBLP search API: reliable full author names and venue links."""
+
 from __future__ import annotations
 
 import re

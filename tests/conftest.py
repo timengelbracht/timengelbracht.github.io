@@ -1,4 +1,5 @@
 """Shared fixtures. Tests never touch the network: sitegen.http.get is replaced."""
+
 from __future__ import annotations
 
 import shutil
@@ -45,11 +46,19 @@ def no_sleep(monkeypatch):
 @pytest.fixture
 def offline(monkeypatch):
     """Every request answers with an HTML error page (the worst realistic case)."""
+
     def fake_get(url, **kw):
         return None if kw.get("binary") else FakeResponse(url)
 
-    for mod in ("sitegen.http", "sitegen.links", "sitegen.teasers", "sitegen.sources.scholar",
-                "sitegen.sources.semantic_scholar", "sitegen.sources.arxiv", "sitegen.sources.openalex",
-                "sitegen.sources.dblp"):
+    for mod in (
+        "sitegen.http",
+        "sitegen.links",
+        "sitegen.teasers",
+        "sitegen.sources.scholar",
+        "sitegen.sources.semantic_scholar",
+        "sitegen.sources.arxiv",
+        "sitegen.sources.openalex",
+        "sitegen.sources.dblp",
+    ):
         monkeypatch.setattr(f"{mod}.get", fake_get)
     return fake_get

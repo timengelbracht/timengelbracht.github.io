@@ -1,4 +1,5 @@
 """Conference and journal names: recognising them and writing them short ("CVPR 2026")."""
+
 from __future__ import annotations
 
 import re

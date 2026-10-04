@@ -1,16 +1,13 @@
 """Small helpers shared by sync and build."""
+
 from __future__ import annotations
 
 import re
-import sys
 import unicodedata
 from pathlib import Path
+from typing import Any
 
 import yaml
-
-
-def log(*args) -> None:
-    print("[sitegen]", *args, file=sys.stderr, flush=True)
 
 
 def ascii_lower(s: str) -> str:
@@ -31,7 +28,7 @@ def slugify(title: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", ascii_lower(short_name(title))).strip("-")[:40] or "paper"
 
 
-def load_yaml(path: Path, default):
+def load_yaml(path: Path, default: Any) -> Any:
     if not path.exists():
         return default
     return yaml.safe_load(path.read_text(encoding="utf-8")) or default
@@ -55,4 +52,7 @@ def collaborators_config(cfg: dict) -> tuple:
 
 def is_abbreviated(name: str) -> bool:
     """'Z. Bauer' or 'A Mercurio' style author names."""
-    return bool(re.match(r"^([A-Z]\.?\s?)+\s?[A-Z][^.]+$", name.strip())) and len(name.split()[0].rstrip(".")) == 1
+    return (
+        bool(re.match(r"^([A-Z]\.?\s?)+\s?[A-Z][^.]+$", name.strip()))
+        and len(name.split()[0].rstrip(".")) == 1
+    )
