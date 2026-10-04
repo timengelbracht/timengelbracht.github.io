@@ -1,0 +1,36 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ["--maxkb=3000"]   # teaser videos are up to a few MB
+      - id: detect-private-key
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.13.0
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
+  - repo: local
+    hooks:
+      - id: structure
+        name: structure (file/function size)
+        entry: uv run python tools/check_structure.py
+        language: system
+        pass_filenames: false
+        types: [python]
+      - id: import-boundaries
+        name: import boundaries
+        entry: uv run lint-imports
+        language: system
+        pass_filenames: false
+        types: [python]
+      - id: duplicate-code
+        name: duplicate code
+        entry: uv run pylint --disable=all --enable=duplicate-code src
+        language: system
+        pass_filenames: false
+        types: [python]

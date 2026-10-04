@@ -21,16 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: pip
-      - run: pip install -e ".[dev]"
-      - run: pytest -q
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync
+      - run: uv run pytest
 
       - name: Sync papers
         if: github.event_name != 'push'
-        run: sitegen sync
+        run: uv run sitegen sync
       - name: Commit new papers and teasers
         if: github.event_name != 'push'
         run: |
@@ -40,7 +37,7 @@ jobs:
           git diff --cached --quiet || git commit -m "Weekly paper sync"
           git push
 
-      - run: sitegen build
+      - run: uv run sitegen build
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
