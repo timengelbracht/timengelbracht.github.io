@@ -17,7 +17,7 @@ now: ""
 # Short line used for link previews (Slack, LinkedIn, X) and search engines.
 tagline: Doctoral Fellow at the ETH AI Center and ETH Zürich, working on robots that understand scenes by interacting with them.
 # Where the site lives. Link previews need the full address. Change it if your repo has another name.
-url: https://timengelbracht.github.io
+url: https://timengelbracht.com
 social_image: assets/social.png
 
 # Contact. The address is shown in a form that address-harvesting bots can't read easily.
