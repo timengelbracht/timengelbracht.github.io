@@ -6,7 +6,8 @@ greeting: "Hi, I'm Tim."
 # [[keyword]] gets a hand-drawn underline; [text](url) becomes a link.
 bio: >-
   I'm a Doctoral Fellow at the [ETH AI Center](https://ai.ethz.ch) and ETH Zürich,
-  supervised by Prof. Marc Pollefeys and Prof. Stefan Leutenegger.
+  supervised by [Prof. Marc Pollefeys](https://people.inf.ethz.ch/marc.pollefeys/)
+  and [Prof. Stefan Leutenegger](https://mrl.ethz.ch/the-group/people/lab-members/stefan-leutenegger.html).
   I work on robots that understand scenes by interacting with them:
   [[mobile manipulation]], [[force-grounded perception]] and [[scene understanding]].
 # Optional "now:" line under the bio (left out while empty), e.g.
