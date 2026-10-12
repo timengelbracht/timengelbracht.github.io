@@ -12,7 +12,7 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from sitegen import venues
+from sitegen import bibtex, venues
 from sitegen.paths import Paths
 from sitegen.util import collaborators_config, load_yaml, norm, person_key, slugify
 
@@ -158,6 +158,7 @@ def prepare(p: dict, me: set) -> dict:
     p["authors_html"] = authors_html(p, me)
     p["venue"] = venue_label(p)
     p["published"] = venues.is_published(p["venue"])
+    p["bibtex"] = bibtex.entry(p, p["venue"])
     p.setdefault("slug", slugify(p["title"]))
     p["chips"] = [(label, links[k]) for k, label in CHIPS if links.get(k)]
     p.setdefault("teaser", {"kind": "doodle", "scene": "reading", "from": "doodle"})

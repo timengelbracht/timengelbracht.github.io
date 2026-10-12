@@ -22,6 +22,22 @@ VENUES = [  # (pattern, short name); first match wins, so specific names come fi
     (r"arxiv", "arXiv"),
 ]
 YEAR = re.compile(r"\b(20\d{2})\b")
+FULL = {  # short name -> full name, for BibTeX
+    "Humanoids": "IEEE-RAS International Conference on Humanoid Robots (Humanoids)",
+    "CVPR": "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)",
+    "ICCV": "Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)",
+    "ECCV": "European Conference on Computer Vision (ECCV)",
+    "RA-L": "IEEE Robotics and Automation Letters",
+    "ICRA": "IEEE International Conference on Robotics and Automation (ICRA)",
+    "IROS": "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)",
+    "RSS": "Robotics: Science and Systems (RSS)",
+    "CoRL": "Conference on Robot Learning (CoRL)",
+    "NeurIPS": "Advances in Neural Information Processing Systems (NeurIPS)",
+    "ICLR": "International Conference on Learning Representations (ICLR)",
+    "3DV": "International Conference on 3D Vision (3DV)",
+    "WACV": "IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)",
+    "Science Robotics": "Science Robotics",
+}
 
 
 def short(raw: str, year=None) -> str:
@@ -61,3 +77,13 @@ def from_text(text: str) -> str | None:
 
 def is_published(label: str) -> bool:
     return bool(label) and not label.lower().startswith("arxiv")
+
+
+def full(name: str) -> str:
+    """'CVPR' -> 'Proceedings of the IEEE/CVF Conference on ... (CVPR)'; 'CVPR Workshop' -> '... Workshops (CVPRW)'."""
+    base = name.removesuffix(" Workshop")
+    if base != name and base == "CVPR":
+        return "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)"
+    if base != name:
+        return f"{FULL.get(base, base)} Workshops"
+    return FULL.get(name, name)

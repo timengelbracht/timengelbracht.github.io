@@ -12,7 +12,7 @@ config.yml + content/*.yml + data/publications.json
 ```
 
 ## Layers (enforced by `lint-imports`)
-`cli → sync | build | failures → teasers → links → sources → http | media | venues → util | paths`
+`cli → sync | build | failures → teasers → links → sources | bibtex → http | media | venues → util | paths`
 — a module may import from modules to its right, never to its left.
 
 ## Modules (`src/sitegen/`)
@@ -25,6 +25,7 @@ config.yml + content/*.yml + data/publications.json
 | `teasers.py` | teaser chain: override → project page → arXiv HTML → arXiv source → PDF → doodle | `Teasers` |
 | `links.py` | finding project/code/video/data links and verifying them | `classify`, `verify`, `page_mentions_paper` |
 | `sources/` | one file per metadata source (scholar, semantic_scholar, arxiv, openalex, dblp) | |
+| `bibtex.py` | BibTeX entries for the paper list (venue year, protected capitals) | `entry` |
 | `http.py` | the only place that does HTTP; retries, never raises | `get` |
 | `media.py` | image/video conversion (Pillow, ffmpeg) | `save_image`, `save_video` |
 | `venues.py` | venue names: short labels, from arXiv comments | `short`, `from_text` |

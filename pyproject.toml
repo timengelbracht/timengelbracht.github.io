@@ -78,7 +78,7 @@ layers = [
     "sitegen.sync | sitegen.build | sitegen.failures",
     "sitegen.teasers",
     "sitegen.links",
-    "sitegen.sources",
+    "sitegen.sources | sitegen.bibtex",
     "sitegen.http | sitegen.media | sitegen.venues",
     "sitegen.util | sitegen.paths",
 ]

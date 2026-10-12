@@ -157,6 +157,11 @@ h2{font-family:var(--f-hand);font-weight:500;font-size:15px;color:var(--muted);m
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 10px;padding:0}
 .chips .tag{margin:0;text-decoration:none;color:var(--muted);padding:1px 9px}
 .chips .tag:hover{color:var(--accent);border-color:var(--accent)}
+.chips button.tag{background:none;cursor:pointer;line-height:inherit}
+.chips .bib-toggle[aria-expanded="true"]{color:var(--accent);border-color:var(--accent)}
+.bib{position:relative;margin:-2px 0 14px;border:1.2px dashed var(--rule);border-radius:8px;background:var(--hover)}
+.bib pre{margin:0;padding:12px 14px;font:12px/1.5 var(--f-mono);white-space:pre-wrap;overflow-wrap:anywhere;color:var(--fg)}
+.bib .bib-copy{position:absolute;top:8px;right:8px;background:var(--bg);color:var(--muted);cursor:pointer;margin:0}
 .tag{font-family:var(--f-mono);font-size:11.5px;border:1.2px solid var(--muted);border-radius:99px;padding:0 7px;margin-left:6px;white-space:nowrap}
 
 .teaser{position:fixed;left:0;top:0;width:min(540px,calc(100vw - 24px));z-index:9;pointer-events:none;opacity:0;transform:translate(-999px,-999px) rotate(-1deg);transition:opacity .18s}
@@ -311,7 +316,8 @@ body>svg:first-of-type{position:absolute}
       <p class="pt">{{ p.title }}<span class="arrow">→</span></p>
       <p class="pa">{% if p.published %}<span class="venue">{{ p.venue }}</span>{% endif %}{{ p.authors_html|safe }}{% if not p.published and p.venue %}{% if p.authors_html %} · {% endif %}<span class="pre">{{ p.venue }} preprint</span>{% endif %}</p>
     </a>
-    {% if p.chips %}<p class="chips">{% for lab, url in p.chips %}<a class="tag" href="{{ url }}" target="_blank" rel="noopener">{{ lab }}</a>{% endfor %}</p>{% endif %}
+    {% if p.chips or p.bibtex %}<p class="chips">{% for lab, url in p.chips %}<a class="tag" href="{{ url }}" target="_blank" rel="noopener">{{ lab }}</a>{% endfor %}{% if p.bibtex %}<button class="tag bib-toggle" type="button" aria-expanded="false" aria-controls="bib-{{ p.slug }}">bibtex</button>{% endif %}</p>{% endif %}
+    {% if p.bibtex %}<div class="bib" id="bib-{{ p.slug }}" hidden><pre>{{ p.bibtex }}</pre><button class="tag bib-copy" type="button">copy</button></div>{% endif %}
     {% endfor %}
   </section>
 
@@ -538,6 +544,14 @@ body>svg:first-of-type{position:absolute}
   document.querySelectorAll('.email').forEach(a=>{
     const addr=a.dataset.u+'@'+a.dataset.d; a.textContent=addr; a.href='mailto:'+addr;
   });
+  document.querySelectorAll('.bib-toggle').forEach(b=>b.addEventListener('click',()=>{
+    const box=document.getElementById(b.getAttribute('aria-controls'));
+    box.hidden=!box.hidden;b.setAttribute('aria-expanded',String(!box.hidden));
+  }));
+  document.querySelectorAll('.bib-copy').forEach(b=>b.addEventListener('click',()=>{
+    const done=t=>{b.textContent=t;setTimeout(()=>b.textContent='copy',1500);};
+    navigator.clipboard.writeText(b.previousElementSibling.textContent).then(()=>done('copied!'),()=>done('select & copy'));
+  }));
   document.querySelectorAll('.copy-mail').forEach(b=>b.addEventListener('click',()=>{
     const a=b.parentElement.querySelector('.email'), addr=a.dataset.u+'@'+a.dataset.d;
     const done=t=>{b.textContent=t;setTimeout(()=>b.textContent='copy',1500);};

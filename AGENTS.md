@@ -57,7 +57,7 @@ Read it at the start of every coding task.
   `teasers.Teasers` added to its chain; a new page section is template + one
   content file + a few lines in `build.run`.
 - Imports flow one way (enforced by `lint-imports`):
-  `cli → sync | build | failures → teasers → links → sources → http | media | venues → util | paths`.
+  `cli → sync | build | failures → teasers → links → sources | bibtex → http | media | venues → util | paths`.
   Need to import "upwards"? The code is in the wrong module — move it.
 - Site content (names, venues, links, wording) lives in `config.yml` /
   `content/`, never in Python.
