@@ -1,9 +1,12 @@
 {
-  "synced": "2026-11-02",
+  "synced": "2026-11-09",
   "papers": [
     {
       "title": "ForceTwin: Physics-informed Digital Twins for Robotic Manipulation from Instrumented Human Interaction",
+      "authors_short": "T Engelbracht, R Zurbrügg, M Mittal, M Hutter, M Pollefeys, H Blum, ...",
+      "venue": "arXiv preprint arXiv:2609.21751, 2026",
       "year": 2026,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:YsMSGLbcyi4C",
       "date": "2026-09-18",
       "authors": [
         "Tim Engelbracht",
@@ -16,12 +19,14 @@
       ],
       "abstract": "Manipulating objects requires understanding not only their motion, but also the physical properties that determine it. For articulated objects, these include inertia, friction, and mechanisms such as springs or door closers, whose effects can vary with configuration and velocity. Such properties are not directly observable from appearance: visually identical doors may require very different effort to manipulate. Existing digital-twin pipelines recover primarily kinematics or assign static physical parameters from visual and language priors, which can yield physically implausible estimates. As a result, state-dependent mechanism dynamics remain unidentified and are not represented in standard asset formats. We present ForceTwin, a system for identifying physics-informed digital twins of articulated objects from instrumented human interaction. A person probes an object using a handheld force-sensing gripper, providing synchronized poses and interaction forces from which we estimate the articulation, parametric dynamics including inertia, Coulomb friction, viscous damping, and a structured neural residual capturing state-dependent mechanism forces. ForceTwin nearly halves the inertial-parameter error of a VLM prior. As a feedforward dynamics model for impedance control on a Spot and a Franka FR3, ForceTwin achieves 87% goal completion across nine object-embodiment pairs, compared with 60% using VLM-prior and 57% using kinematics-only twins, with the largest gains on objects whose strong mechanisms cause both baselines to stall. We further use the identified twins to train whole-body door-traversal policies and deploy them in the real world. Project Page: https://timengelbracht.github.io/forcetwin-website/",
       "arxiv": "2609.21751",
+      "doi": "10.48550/arXiv.2609.21751",
       "s2_url": "https://www.semanticscholar.org/paper/838bac113309511719c3839335f4c9cb59a184dd",
       "links": {
         "project": "https://timengelbracht.github.io/forcetwin-website/",
         "arxiv": "https://arxiv.org/abs/2609.21751"
       },
       "arxiv_url": "https://arxiv.org/abs/2609.21751",
+      "paper_url": "https://doi.org/10.48550/arXiv.2609.21751",
       "slug": "forcetwin",
       "teaser": {
         "kind": "image",
@@ -31,9 +36,11 @@
     },
     {
       "title": "LIME: Learning Intent-aware Camera Motion from Egocentric Video",
+      "authors_short": "B Sun, J Li, YH Yang, C Zhang, T Engelbracht, S Hong, C Cadena, ...",
+      "venue": "arXiv preprint arXiv:2607.02417, 2026",
       "year": 2026,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:Y0pCki6q_DkC",
       "date": "2026-07-02",
-      "venue": "arXiv.org",
       "authors": [
         "Boyang Sun",
         "Jiajie Li",
@@ -63,10 +70,12 @@
       }
     },
     {
-      "title": "Articulated 3D Scene Graphs for Open-World Mobile Manipulation",
+      "title": "Articulated 3d scene graphs for open-world mobile manipulation",
+      "authors_short": "M Büchner, A Röfer, T Engelbracht, T Welschehold, Z Bauer, H Blum, ...",
+      "venue": "arXiv preprint arXiv:2602.16356, 2026",
       "year": 2026,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:UeHWp8X0CEIC",
       "date": "2026-02-18",
-      "venue": "arXiv.org",
       "authors": [
         "Martin Büchner",
         "Adrian Röfer",
@@ -95,10 +104,12 @@
       }
     },
     {
-      "title": "Hoi! - A Multimodal Dataset for Force-Grounded, Cross-View Articulated Manipulation",
-      "year": 2025,
-      "date": "2025-12-04",
+      "title": "Hoi!-A Multimodal Dataset for Force-Grounded, Cross-View Articulated Manipulation",
+      "authors_short": "T Engelbracht, R Zurbrügg, M Wohlrapp, M Büchner, A Valada, ...",
       "venue": "CVPR 2026",
+      "year": 2026,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:Tyk-4Ss8FVUC",
+      "date": "2025-12-04",
       "authors": [
         "Tim Engelbracht",
         "René Zurbrügg",
@@ -127,10 +138,12 @@
       }
     },
     {
-      "title": "SpotLight: Robotic Scene Understanding Through Interaction and Affordance Detection",
-      "year": 2025,
-      "date": "2025-09-30",
+      "title": "Spotlight: Robotic scene understanding through interaction and affordance detection",
+      "authors_short": "T Engelbracht, R Zurbrügg, M Pollefeys, H Blum, Z Bauer",
       "venue": "Humanoids 2025",
+      "year": 2025,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:u-x6o8ySG0sC",
+      "date": "2025-09-30",
       "authors": [
         "Tim Engelbracht",
         "René Zurbrügg",
@@ -161,10 +174,12 @@
       }
     },
     {
-      "title": "CroCoDL: Cross-device Collaborative Dataset for Localization",
-      "year": 2025,
-      "date": "2025-06-10",
+      "title": "Crocodl: Cross-device collaborative dataset for localization",
+      "authors_short": "H Blum, A Mercurio, J O'Reilly, T Engelbracht, M Dusmanu, M Pollefeys, ...",
       "venue": "CVPR 2025",
+      "year": 2025,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:2osOgNQ5qMEC",
+      "date": "2025-06-10",
       "authors": [
         "Hermann Blum",
         "Alessandro Mercurio",
@@ -191,9 +206,11 @@
     },
     {
       "title": "Spot-On: A Mixed Reality Interface for Multi-Robot Cooperation",
-      "year": 2025,
-      "date": "2025-05-28",
+      "authors_short": "T Engelbracht, P Lukovic, T Behrens, K Lascheit, R Zurbrügg, M Pollefeys, ...",
       "venue": "CVPR Workshop 2025",
+      "year": 2025,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:9yKSN-GCB0IC",
+      "date": "2025-05-28",
       "authors": [
         "Tim Engelbracht",
         "Petar Lukovic",
