@@ -215,10 +215,12 @@ svg.bot{display:block;overflow:visible;stroke:var(--bot-line);stroke-width:2.6;s
 
 /* spot easter egg */
 .spot{position:fixed;bottom:6px;left:0;width:150px;z-index:7;fill:var(--butter);pointer-events:none;transform:translateX(-170px)}
-.spot.go{animation:trot 7s linear forwards}
-.spot.go .leg{animation:step .32s infinite alternate ease-in-out}
-.spot.go .leg.b{animation-delay:-.32s}
-@keyframes trot{to{transform:translateX(calc(100vw + 20px))}}
+.spot.go{bottom:var(--y,6px);width:var(--w,150px);animation:trot var(--d,7s) linear forwards}
+.spot.go.rev{animation-name:trot-rev}
+.spot.go .leg{animation:step var(--s,.32s) infinite alternate ease-in-out}
+.spot.go .leg.b{animation-delay:calc(-1 * var(--s,.32s))}
+@keyframes trot{from{transform:translateX(calc(-1 * var(--w,150px) - 20px))}to{transform:translateX(calc(100vw + 20px))}}
+@keyframes trot-rev{from{transform:translateX(calc(100vw + 20px)) scaleX(-1)}to{transform:translateX(calc(-1 * var(--w,150px) - 20px)) scaleX(-1)}}
 @keyframes step{from{transform:rotate(14deg)}to{transform:rotate(-14deg)}}
 
 /* light switch */
@@ -613,13 +615,26 @@ body>svg:first-of-type{position:absolute}
   }
   requestAnimationFrame(frame);
 
-  /* type "spot" */
-  const spot=document.getElementById('spot'); let buf='';
+  /* type "spot": every match sends another Spot; the first takes the classic floor lane */
+  const spotTpl=document.getElementById('spot'); let buf='', live=0;
+  function sendSpot(){
+    const s=spotTpl.cloneNode(true); s.removeAttribute('id');
+    if(live>0){
+      const f=Math.random();                       // 0 = floor, 1 = high up (smaller, further away)
+      s.style.setProperty('--y',Math.round(6+f*innerHeight*.6)+'px');
+      s.style.setProperty('--w',Math.round(150-f*60)+'px');
+      s.style.setProperty('--d',(4.5+Math.random()*4).toFixed(2)+'s');
+      s.style.setProperty('--s',(.24+Math.random()*.14).toFixed(2)+'s');
+      s.style.zIndex=7-Math.round(f*3);
+      if(Math.random()<.35)s.classList.add('rev');
+    }
+    s.classList.add('go'); document.body.append(s); live++;
+    s.addEventListener('animationend',e=>{if(e.animationName.startsWith('trot')){s.remove();live--;}});
+  }
   addEventListener('keydown',e=>{
     if(e.key.length!==1)return; buf=(buf+e.key.toLowerCase()).slice(-4);
-    if(buf==='spot'&&!spot.classList.contains('go')&&!reduce){spot.classList.add('go');}
+    if(buf==='spot'&&!reduce&&live<15)sendSpot();
   });
-  spot.addEventListener('animationend',e=>{if(e.animationName==='trot')spot.classList.remove('go');});
 
   /* sleepy footer after 22:00 Zurich */
   try{const h=+new Intl.DateTimeFormat('en-GB',{hour:'numeric',hour12:false,timeZone:'Europe/Zurich'}).format(new Date());
