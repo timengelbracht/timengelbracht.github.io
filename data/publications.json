@@ -1,13 +1,11 @@
 {
-  "synced": "2026-11-09",
+  "synced": "2026-11-16",
   "papers": [
     {
       "title": "ForceTwin: Physics-informed Digital Twins for Robotic Manipulation from Instrumented Human Interaction",
-      "authors_short": "T Engelbracht, R Zurbrügg, M Mittal, M Hutter, M Pollefeys, H Blum, ...",
-      "venue": "arXiv preprint arXiv:2609.21751, 2026",
       "year": 2026,
-      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:YsMSGLbcyi4C",
       "date": "2026-09-18",
+      "venue": "arXiv.org",
       "authors": [
         "Tim Engelbracht",
         "René Zurbrügg",
@@ -36,11 +34,9 @@
     },
     {
       "title": "LIME: Learning Intent-aware Camera Motion from Egocentric Video",
-      "authors_short": "B Sun, J Li, YH Yang, C Zhang, T Engelbracht, S Hong, C Cadena, ...",
-      "venue": "arXiv preprint arXiv:2607.02417, 2026",
       "year": 2026,
-      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:Y0pCki6q_DkC",
       "date": "2026-07-02",
+      "venue": "arXiv.org",
       "authors": [
         "Boyang Sun",
         "Jiajie Li",
@@ -70,12 +66,10 @@
       }
     },
     {
-      "title": "Articulated 3d scene graphs for open-world mobile manipulation",
-      "authors_short": "M Büchner, A Röfer, T Engelbracht, T Welschehold, Z Bauer, H Blum, ...",
-      "venue": "arXiv preprint arXiv:2602.16356, 2026",
+      "title": "Articulated 3D Scene Graphs for Open-World Mobile Manipulation",
       "year": 2026,
-      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:UeHWp8X0CEIC",
       "date": "2026-02-18",
+      "venue": "arXiv.org",
       "authors": [
         "Martin Büchner",
         "Adrian Röfer",
@@ -104,12 +98,10 @@
       }
     },
     {
-      "title": "Hoi!-A Multimodal Dataset for Force-Grounded, Cross-View Articulated Manipulation",
-      "authors_short": "T Engelbracht, R Zurbrügg, M Wohlrapp, M Büchner, A Valada, ...",
-      "venue": "CVPR 2026",
-      "year": 2026,
-      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:Tyk-4Ss8FVUC",
+      "title": "Hoi! - A Multimodal Dataset for Force-Grounded, Cross-View Articulated Manipulation",
+      "year": 2025,
       "date": "2025-12-04",
+      "venue": "CVPR 2026",
       "authors": [
         "Tim Engelbracht",
         "René Zurbrügg",
@@ -138,12 +130,10 @@
       }
     },
     {
-      "title": "Spotlight: Robotic scene understanding through interaction and affordance detection",
-      "authors_short": "T Engelbracht, R Zurbrügg, M Pollefeys, H Blum, Z Bauer",
-      "venue": "Humanoids 2025",
+      "title": "SpotLight: Robotic Scene Understanding Through Interaction and Affordance Detection",
       "year": 2025,
-      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:u-x6o8ySG0sC",
       "date": "2025-09-30",
+      "venue": "Humanoids 2025",
       "authors": [
         "Tim Engelbracht",
         "René Zurbrügg",
@@ -174,12 +164,10 @@
       }
     },
     {
-      "title": "Crocodl: Cross-device collaborative dataset for localization",
-      "authors_short": "H Blum, A Mercurio, J O'Reilly, T Engelbracht, M Dusmanu, M Pollefeys, ...",
-      "venue": "CVPR 2025",
+      "title": "CroCoDL: Cross-device Collaborative Dataset for Localization",
       "year": 2025,
-      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:2osOgNQ5qMEC",
       "date": "2025-06-10",
+      "venue": "CVPR 2025",
       "authors": [
         "Hermann Blum",
         "Alessandro Mercurio",
@@ -206,11 +194,9 @@
     },
     {
       "title": "Spot-On: A Mixed Reality Interface for Multi-Robot Cooperation",
-      "authors_short": "T Engelbracht, P Lukovic, T Behrens, K Lascheit, R Zurbrügg, M Pollefeys, ...",
-      "venue": "CVPR Workshop 2025",
       "year": 2025,
-      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Ig5T__8AAAAJ&pagesize=100&sortby=pubdate&citation_for_view=Ig5T__8AAAAJ:9yKSN-GCB0IC",
       "date": "2025-05-28",
+      "venue": "CVPR Workshop 2025",
       "authors": [
         "Tim Engelbracht",
         "Petar Lukovic",
